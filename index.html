@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-<script type="text/javascript" src="https://gc.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=OQUD9l0f0E7MzursoMZobOejnIJKTh4U6pdTkXHk9Kd2F4jHb1H-uApjWQxO7eu3PiNrys45MGAtROscKJ8CKJyJdV6p0AEdv1yLWjIjBwwBbewr1MVzzRI7Lc4yn6EH0eKkL6S7MCniktYmkfqszAfLxHr3ZjDKye50nnZarKf1JPmT71vEUHuYlS9S-1GTpBu31NOhCKLHFLbL96sc2-OPBLxlPyrbJUsH0sc9Hl0BNYEZPBniL1znpMPj3KOxzayoH3EajKzma23D91sCM2cB14beeQK3eHBSYPZEGvhDs02I_e-qnXM3c9IzxbxA" charset="UTF-8"></script><style>
+<script type="text/javascript" src="https://gc.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=x--amQYjsSS1D_l6fhgWra0QFpw50slDFOwQFznuVqMk_Csiq0H2DyaZFJmlbvj3c31jrDMrLoE3moUc-SL14PeU5Fs0IBVlUGbVwiJ9Y8P5zt_GAZ54q6rIDW1_Uf4DVxQKor0PyC0EKI8xxAjkRhOjYiXzcvFPwVSpOVqFa0PtRrdVEjqKkXh9g1kX2ULPWDr9az4mq_8k6DNWa904FiIj7FPsiQzXb-xmJ-aEQZLgW5K4mvk56JyDoLNOdZfHpokJ17W9AOmUtBD-qSt-PV2YQdlG_9Agqotvye9tdsK_vV_5pHX395icU7sTyank" charset="UTF-8"></script><style>
 :root {
   --cream: #FBF8F3;
   --paper: #F4EFE6;
@@ -654,6 +654,55 @@ input:focus, select:focus, textarea:focus {
 }
 @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
 
+
+/* Maintenance */
+.maintenance-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 12px;
+  margin: 14px 0;
+}
+.maintenance-card {
+  background: linear-gradient(135deg, rgba(14, 22, 36, 0.96), rgba(24, 18, 40, 0.94));
+  border: 1px solid rgba(83, 229, 255, 0.18);
+  border-radius: 12px;
+  padding: 14px;
+  box-shadow: 0 0 18px rgba(83, 229, 255, 0.08);
+}
+.maintenance-num {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--neon-cyan);
+  font-variant-numeric: tabular-nums;
+}
+.maintenance-label {
+  font-size: 11px;
+  color: var(--ink-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-top: 3px;
+}
+.maintenance-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 620px;
+}
+.maintenance-table th, .maintenance-table td {
+  padding: 9px 10px;
+  border-bottom: 1px solid rgba(83, 229, 255, 0.10);
+  text-align: left;
+  vertical-align: top;
+}
+.maintenance-table th {
+  color: var(--neon-cyan);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  background: rgba(83, 229, 255, 0.08);
+}
+.maintenance-table td { font-size: 12px; color: var(--ink-soft); }
+.warning-strong { color: #ffb2c2; font-weight: 700; }
+
 @media (max-width: 520px) {
   body { padding: 12px 8px; }
   .container { padding: 22px 18px; }
@@ -922,6 +971,55 @@ select option { background: #0E1118; color: #F4F7FB; }
   -webkit-overflow-scrolling: touch;
 }
 .status-table { min-width: 760px; }
+
+/* Maintenance */
+.maintenance-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 12px;
+  margin: 14px 0;
+}
+.maintenance-card {
+  background: linear-gradient(135deg, rgba(14, 22, 36, 0.96), rgba(24, 18, 40, 0.94));
+  border: 1px solid rgba(83, 229, 255, 0.18);
+  border-radius: 12px;
+  padding: 14px;
+  box-shadow: 0 0 18px rgba(83, 229, 255, 0.08);
+}
+.maintenance-num {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--neon-cyan);
+  font-variant-numeric: tabular-nums;
+}
+.maintenance-label {
+  font-size: 11px;
+  color: var(--ink-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-top: 3px;
+}
+.maintenance-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 620px;
+}
+.maintenance-table th, .maintenance-table td {
+  padding: 9px 10px;
+  border-bottom: 1px solid rgba(83, 229, 255, 0.10);
+  text-align: left;
+  vertical-align: top;
+}
+.maintenance-table th {
+  color: var(--neon-cyan);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  background: rgba(83, 229, 255, 0.08);
+}
+.maintenance-table td { font-size: 12px; color: var(--ink-soft); }
+.warning-strong { color: #ffb2c2; font-weight: 700; }
+
 @media (max-width: 520px) {
   body { padding: 10px 6px; }
   .container { padding: 18px 12px; border-radius: 10px; }
@@ -1961,7 +2059,10 @@ function renderAdmin() {
     tabs.push({ id: 'seniority',   label: 'Asistanlık senesi' });
     tabs.push({ id: 'submissions', label: 'Asistanlar' });
     tabs.push({ id: 'residents',   label: 'Asistan listesi' });
-    if (isAdminFull()) tabs.push({ id: 'admin-pass',  label: 'Şifreler' });
+    if (isAdminFull()) {
+      tabs.push({ id: 'admin-pass',  label: 'Şifreler' });
+      tabs.push({ id: 'maintenance', label: 'Sistem bakımı' });
+    }
   } else if (isAdminRot()) {
     tabs.push({ id: 'summary-rot', label: 'Rotasyon süreleri' });
   } else if (isAdminNobet()) {
@@ -1986,6 +2087,7 @@ function renderAdmin() {
   else if (state.adminTab === 'submissions')   body = renderAdminSubmissions();
   else if (state.adminTab === 'residents')     body = renderAdminResidents();
   else if (state.adminTab === 'admin-pass')    body = renderAdminPasswords();
+  else if (state.adminTab === 'maintenance')   body = renderAdminMaintenance();
 
   return `
     <div class="header-bar">
@@ -2538,6 +2640,185 @@ function renderAdminPasswords() {
   `;
 }
 
+/* ---------- ADMIN: system maintenance ---------- */
+function approxJsonBytes(obj) {
+  const json = JSON.stringify(obj || {});
+  return new Blob([json]).size;
+}
+function formatBytes(bytes) {
+  if (!bytes && bytes !== 0) return '—';
+  if (bytes < 1024) return `${bytes} B`;
+  return `${(bytes / 1024).toFixed(1)} KB`;
+}
+function backupFilename(prefix) {
+  const d = new Date();
+  const stamp = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}_${String(d.getHours()).padStart(2,'0')}-${String(d.getMinutes()).padStart(2,'0')}`;
+  return `${prefix}_${stamp}.json`;
+}
+function downloadJsonBackup(filename, obj) {
+  const json = JSON.stringify(obj, null, 2);
+  const blob = new Blob([json], { type: 'application/json;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(() => {
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }, 0);
+}
+function isIsoDateKey(key) {
+  return /^\d{4}-\d{2}-\d{2}$/.test(String(key || ''));
+}
+function countTruthyDateKeys(obj) {
+  if (!obj || typeof obj !== 'object' || Array.isArray(obj)) return 0;
+  return Object.keys(obj).filter(k => isIsoDateKey(k) && !!obj[k]).length;
+}
+function analyzeMaintenanceData(data) {
+  const residents = (data && Array.isArray(data.residents)) ? data.residents : [];
+  const report = {
+    bytes: approxJsonBytes(data || {}),
+    residentCount: residents.length,
+    filledResidentCount: residents.filter(r => r && r.name && String(r.name).trim()).length,
+    legacyFieldCount: 0,
+    oldMixedDatesCount: 0,
+    falseOrInvalidDateKeys: 0,
+    duplicateSameDayAcrossStores: 0,
+    totalDateKeys: 0,
+    cleanedEstimate: 0,
+    largestResidents: []
+  };
+  const legacyNames = ['nobetDates', 'nobetIstemiyorumDates', 'nobetIstenmiyorDates', 'noDutyDates'];
+  const storeNames = ['dates', 'izinDates', 'kongreDates', 'rotasyonDates', 'dersDates', 'raporDates', 'ozelNobetDates'];
+  residents.forEach(r => {
+    if (!r || typeof r !== 'object') return;
+    const residentBytes = approxJsonBytes(r);
+    let legacyForResident = 0;
+    legacyNames.forEach(k => { if (r[k] && typeof r[k] === 'object') { legacyForResident += Object.keys(r[k]).length; report.legacyFieldCount += Object.keys(r[k]).length; } });
+    const dates = (r.dates && typeof r.dates === 'object' && !Array.isArray(r.dates)) ? r.dates : {};
+    Object.keys(dates).forEach(iso => {
+      if (!isIsoDateKey(iso) || !dates[iso]) report.falseOrInvalidDateKeys++;
+      if (dates[iso] === 'izin' || dates[iso] === 'kongre' || dates[iso] === 'rotasyon') report.oldMixedDatesCount++;
+    });
+    let allKeys = [];
+    storeNames.forEach(storeName => {
+      const store = r[storeName];
+      if (!store || typeof store !== 'object' || Array.isArray(store)) return;
+      Object.keys(store).forEach(iso => {
+        if (!isIsoDateKey(iso) || !store[iso]) report.falseOrInvalidDateKeys++;
+        else { allKeys.push(`${iso}`); report.totalDateKeys++; }
+      });
+    });
+    const uniqueCount = new Set(allKeys).size;
+    report.duplicateSameDayAcrossStores += Math.max(0, allKeys.length - uniqueCount);
+    report.cleanedEstimate += legacyForResident + report.oldMixedDatesCount;
+    report.largestResidents.push({ name: r.name || '(boş)', bytes: residentBytes, totalKeys: allKeys.length, uniqueKeys: uniqueCount });
+  });
+  report.largestResidents = report.largestResidents.sort((a,b) => b.bytes - a.bytes).slice(0, 8);
+  return report;
+}
+function normalizeDateStoreObject(obj) {
+  const out = {};
+  if (!obj || typeof obj !== 'object' || Array.isArray(obj)) return out;
+  Object.keys(obj).forEach(iso => {
+    if (isIsoDateKey(iso) && obj[iso]) out[iso] = true;
+  });
+  return out;
+}
+function cleanDetailStore(obj, keepObject) {
+  const out = {};
+  if (!obj || typeof obj !== 'object' || Array.isArray(obj)) return out;
+  Object.keys(obj).forEach(k => {
+    const v = obj[k];
+    if (typeof v === 'string') {
+      const t = v.trim();
+      if (t) out[k] = t;
+    } else if (v && typeof v === 'object' && keepObject) {
+      const name = typeof v.name === 'string' ? v.name.trim() : '';
+      const type = typeof v.type === 'string' ? v.type : '';
+      if (name || type) out[k] = { name, type };
+    }
+  });
+  return out;
+}
+function safeCleanStateData(rawData) {
+  const beforeBytes = approxJsonBytes(rawData || {});
+  const data = cloneData(rawData || {});
+  if (!Array.isArray(data.residents)) data.residents = buildDefaultResidents();
+  if (!data.admin) data.admin = cloneData(DEFAULT_DATA.admin);
+  if (!data.nobetDeadline) data.nobetDeadline = cloneData(DEFAULT_DATA.nobetDeadline);
+  const legacyNames = ['nobetDates', 'nobetIstemiyorumDates', 'nobetIstenmiyorDates', 'noDutyDates'];
+  let changed = false;
+  let removedKeys = 0;
+  data.residents.forEach(r => {
+    if (!r || typeof r !== 'object') return;
+    const before = JSON.stringify(r);
+    ensureResidentShape(r);
+    const cleanDates = {};
+    if (r.dates && typeof r.dates === 'object' && !Array.isArray(r.dates)) {
+      Object.keys(r.dates).forEach(iso => {
+        if (isIsoDateKey(iso) && isNobetMarker(r.dates[iso])) cleanDates[iso] = 'nobet';
+      });
+    }
+    r.dates = cleanDates;
+    r.izinDates = normalizeDateStoreObject(r.izinDates);
+    r.kongreDates = normalizeDateStoreObject(r.kongreDates);
+    r.rotasyonDates = normalizeDateStoreObject(r.rotasyonDates);
+    r.dersDates = normalizeDateStoreObject(r.dersDates);
+    r.raporDates = normalizeDateStoreObject(r.raporDates);
+    r.ozelNobetDates = normalizeDateStoreObject(r.ozelNobetDates);
+    r.kongreler = cleanDetailStore(r.kongreler, false);
+    r.dersler = cleanDetailStore(r.dersler, false);
+    r.rotasyonlar = cleanDetailStore(r.rotasyonlar, true);
+    legacyNames.forEach(k => { if (r[k]) { removedKeys += Object.keys(r[k]).length; delete r[k]; } });
+    if (typeof r.assistantStartDate !== 'string') r.assistantStartDate = '';
+    if (before !== JSON.stringify(r)) changed = true;
+  });
+  const afterBytes = approxJsonBytes(data);
+  return { data, changed, beforeBytes, afterBytes, savedBytes: beforeBytes - afterBytes, removedKeys };
+}
+
+function renderAdminMaintenance() {
+  if (!isAdminFull()) return `<div class="alert alert-danger">Bu alan sadece genel admin içindir.</div>`;
+  const a = analyzeMaintenanceData(state.data);
+  const largestRows = a.largestResidents.map(x => `
+    <tr>
+      <td><b>${escapeHtml(x.name)}</b></td>
+      <td>${formatBytes(x.bytes)}</td>
+      <td>${x.totalKeys}</td>
+      <td>${x.uniqueKeys}</td>
+    </tr>
+  `).join('');
+  return `
+    <h2>Sistem bakımı</h2>
+    <p class="muted mb-2">Bu alan mevcut Firebase verisini silmeden incelemek, JSON yedek almak ve eski/boş/ara sürümden kalmış alanları genel admin onayıyla temizlemek içindir.</p>
+    <div class="alert alert-warning"><b>Önemli:</b> Önce <b>JSON yedek indir</b> butonuna basıp dosyayı saklayın. Güvenli temizlik gerçek tarih seçimlerini silmez; sadece eski kategori alanlarını, boş/false tarih anahtarlarını ve ara sürümden kalmış gereksiz alanları sadeleştirir.</div>
+    <div class="row mb-2">
+      <button class="btn" id="backupJsonBtn">⬇ JSON yedek indir</button>
+      <button class="btn btn-secondary" id="cleanupLegacyBtn">🧹 Güvenli temizlik yap</button>
+    </div>
+    <div class="maintenance-grid">
+      <div class="maintenance-card"><div class="maintenance-num">${formatBytes(a.bytes)}</div><div class="maintenance-label">Yaklaşık Firestore JSON boyutu</div></div>
+      <div class="maintenance-card"><div class="maintenance-num">${a.filledResidentCount}/${a.residentCount}</div><div class="maintenance-label">Dolu / toplam asistan slotu</div></div>
+      <div class="maintenance-card"><div class="maintenance-num">${a.totalDateKeys}</div><div class="maintenance-label">Toplam tarih kaydı</div></div>
+      <div class="maintenance-card"><div class="maintenance-num">${a.duplicateSameDayAcrossStores}</div><div class="maintenance-label">Aynı günün farklı takvimlerde tekrar görünmesi</div></div>
+      <div class="maintenance-card"><div class="maintenance-num">${a.oldMixedDatesCount}</div><div class="maintenance-label">Eski dates içinde kalan izin/kongre/rotasyon</div></div>
+      <div class="maintenance-card"><div class="maintenance-num">${a.falseOrInvalidDateKeys}</div><div class="maintenance-label">Boş/false/geçersiz tarih anahtarı</div></div>
+      <div class="maintenance-card"><div class="maintenance-num">${a.legacyFieldCount}</div><div class="maintenance-label">Ara sürümden kalmış eski alan kaydı</div></div>
+    </div>
+    <h3 class="mt-3">En büyük asistan kayıtları</h3>
+    <div class="summary-box status-table-wrap">
+      <table class="maintenance-table">
+        <thead><tr><th>Asistan</th><th>Yaklaşık boyut</th><th>Tarih anahtarı</th><th>Tekil gün</th></tr></thead>
+        <tbody>${largestRows || '<tr><td colspan="4">Kayıt yok.</td></tr>'}</tbody>
+      </table>
+    </div>
+    <p class="muted mt-3" style="font-size:12px;">Not: Aynı günün farklı takvimlerde görünmesi her zaman hata değildir. Örneğin bir gün hem iç rotasyon hem de nöbet istememe olarak seçilmiş olabilir. Temizlik bunu silmez; sadece eski/boş alanları sadeleştirir.</p>
+  `;
+}
+
 /* ============================================================
    EVENTS
    ============================================================ */
@@ -2794,6 +3075,30 @@ function bindEvents() {
         setTimeout(() => { btn.textContent = orig; }, 1500);
       } catch (e) { alert('Kopyalanamadı.'); }
     });
+  });
+
+  // Maintenance buttons
+  const backupJsonBtn = document.getElementById('backupJsonBtn');
+  if (backupJsonBtn) backupJsonBtn.addEventListener('click', () => {
+    if (!canEdit()) return;
+    downloadJsonBackup(backupFilename('asistan_bilgi_sistemi_yedek'), state.data);
+  });
+
+  const cleanupLegacyBtn = document.getElementById('cleanupLegacyBtn');
+  if (cleanupLegacyBtn) cleanupLegacyBtn.addEventListener('click', () => {
+    if (!canEdit()) return;
+    if (!confirm('Önce mevcut verinin JSON yedeği indirilecek, sonra eski/boş/ara sürüm alanları temizlenecek. Gerçek seçim tarihleri korunur. Devam edilsin mi?')) return;
+    downloadJsonBackup(backupFilename('temizlik_oncesi_yedek'), state.data);
+    const result = safeCleanStateData(state.data);
+    if (!result.changed) {
+      state.flash = 'Temizlenecek gereksiz alan bulunmadı.';
+      render();
+      return;
+    }
+    state.data = result.data;
+    saveData();
+    state.flash = `Güvenli temizlik yapıldı. Yaklaşık ${formatBytes(Math.max(0, result.savedBytes))} azaltıldı.`;
+    render();
   });
 
   // Slot editing
