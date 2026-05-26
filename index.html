@@ -4,10 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Asistan Bilgi Sistemi</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-<script type="text/javascript" src="https://gc.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=x--amQYjsSS1D_l6fhgWra0QFpw50slDFOwQFznuVqMk_Csiq0H2DyaZFJmlbvj3c31jrDMrLoE3moUc-SL14PeU5Fs0IBVlUGbVwiJ9Y8P5zt_GAZ54q6rIDW1_Uf4DVxQKor0PyC0EKI8xxAjkRhOjYiXzcvFPwVSpOVqFa0PtRrdVEjqKkXh9g1kX2ULPWDr9az4mq_8k6DNWa904FiIj7FPsiQzXb-xmJ-aEQZLgW5K4mvk56JyDoLNOdZfHpokJ17W9AOmUtBD-qSt-PV2YQdlG_9Agqotvye9tdsK_vV_5pHX395icU7sTyank" charset="UTF-8"></script><style>
+<script type="text/javascript" src="https://gc.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=g9TI-UOjojRGuF_CZC2hfuV0JCmJkCCeWZhEgBeWsbXcX_qOJxF1kL5FR28hlQSXFszGvPb_2uwieFvCsafu-BLamsd7Sz3BOK2WIrIuBODX8Bg0BNK1inQdukls1Ywzh08SB1wk3mPKbF0kGeXSY7G1_s8-Z0DUkDiSMTUI3ujkQHUZjiq7J8Q7Gaz4DA3Fv-tYEigibEkcvbPe54IgqKVjNWfOdHsYELQKeLFTT0zk1OBGbvWcdv6o3jtNU8jiX62f2URaxPwIBb685MauSOsmkjgpY0N131bjsCtCCC4NGxDuBnd6o-rpR8SK1yOz" charset="UTF-8"></script><style>
 :root {
   --cream: #FBF8F3;
   --paper: #F4EFE6;
@@ -37,7 +34,7 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html, body { background: var(--cream); color: var(--ink); }
 body {
-  font-family: 'IBM Plex Sans', -apple-system, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
   font-size: 15px;
   line-height: 1.5;
   min-height: 100vh;
@@ -45,16 +42,16 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 h1, h2, h3 {
-  font-family: 'Fraunces', Georgia, serif;
+  font-family: 'Segoe UI', Georgia, serif;
   font-weight: 500;
   letter-spacing: -0.02em;
   color: var(--ink);
 }
 h1 { font-size: 30px; line-height: 1.1; font-variation-settings: "opsz" 72; }
 h2 { font-size: 21px; line-height: 1.2; margin-bottom: 14px; }
-h3 { font-size: 16px; line-height: 1.3; font-weight: 600; font-family: 'IBM Plex Sans', sans-serif; letter-spacing: 0; }
+h3 { font-size: 16px; line-height: 1.3; font-weight: 600; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif; letter-spacing: 0; }
 p { color: var(--ink-soft); }
-code { font-family: 'IBM Plex Mono', monospace; font-size: 0.9em; background: var(--paper); padding: 1px 5px; border-radius: 3px; }
+code { font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', monospace; font-size: 0.9em; background: var(--paper); padding: 1px 5px; border-radius: 3px; }
 .container {
   max-width: 920px;
   margin: 0 auto;
@@ -407,7 +404,7 @@ input:focus, select:focus, textarea:focus {
   padding: 12px;
 }
 .stat-card .stat-num {
-  font-family: 'Fraunces', Georgia, serif;
+  font-family: 'Segoe UI', Georgia, serif;
   font-size: 24px;
   line-height: 1;
   color: var(--ink);
@@ -1031,12 +1028,23 @@ select option { background: #0E1118; color: #F4F7FB; }
 </style>
 </head>
 <body>
-<div class="container" id="app"></div>
+<div class="container" id="app">
+  <div class="header-bar">
+    <div>
+      <h1>Asistan Bilgi Sistemi</h1>
+      <div class="subtitle">Mobil hızlı başlangıç</div>
+    </div>
+  </div>
+  <div class="alert alert-info">
+    <span class="spinner"></span> Sayfa açılıyor. Firebase bağlantısı kurulurken lütfen bekleyin...
+  </div>
+  <p class="muted" style="font-size:12px;">Bu ekran, mobilde boş sayfa hissi oluşmaması için HTML yüklenir yüklenmez gösterilir.</p>
+</div>
 
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
-import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js";
-import { getFirestore, doc, onSnapshot, setDoc } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
+// Firebase modülleri dinamik yüklenir. Böylece mobilde Firebase CDN gecikse bile
+// kullanıcı boş ekran yerine temel yükleniyor ekranını hemen görür.
+let initializeApp, getAuth, signInAnonymously, getFirestore, doc, onSnapshot, setDoc;
 
 /* ============================================================
    👇 BURAYI FIREBASE CONSOLE'DAN ALDIĞINIZ CONFIG İLE DEĞİŞTİRİN
@@ -1052,10 +1060,30 @@ const firebaseConfig = {
 };
 /* ============================================================ */
 
-const fbApp = initializeApp(firebaseConfig);
-const fbAuth = getAuth(fbApp);
-const fbDb = getFirestore(fbApp);
-const DOC_REF = doc(fbDb, "combined", "state");
+let fbApp = null;
+let fbAuth = null;
+let fbDb = null;
+let DOC_REF = null;
+
+async function loadFirebaseModules() {
+  if (DOC_REF) return;
+  const [appMod, authMod, firestoreMod] = await Promise.all([
+    import("https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js"),
+    import("https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js"),
+    import("https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js")
+  ]);
+  initializeApp = appMod.initializeApp;
+  getAuth = authMod.getAuth;
+  signInAnonymously = authMod.signInAnonymously;
+  getFirestore = firestoreMod.getFirestore;
+  doc = firestoreMod.doc;
+  onSnapshot = firestoreMod.onSnapshot;
+  setDoc = firestoreMod.setDoc;
+  fbApp = initializeApp(firebaseConfig);
+  fbAuth = getAuth(fbApp);
+  fbDb = getFirestore(fbApp);
+  DOC_REF = doc(fbDb, "combined", "state");
+}
 
 /* ============================================================
    NÖBET & ROTASYON BİRLEŞİK SİSTEM
@@ -2676,6 +2704,50 @@ function countTruthyDateKeys(obj) {
   if (!obj || typeof obj !== 'object' || Array.isArray(obj)) return 0;
   return Object.keys(obj).filter(k => isIsoDateKey(k) && !!obj[k]).length;
 }
+function parseRangeKeyForMaintenance(key) {
+  const raw = String(key || '');
+  const parts = raw.split('_');
+  const start = parts[0];
+  const end = parts[1] || parts[0];
+  if (!isIsoDateKey(start) || !isIsoDateKey(end)) return null;
+  return start <= end ? { start, end } : { start: end, end: start };
+}
+function rangesOverlap(a, b) {
+  return !!(a && b && a.start <= b.end && b.start <= a.end);
+}
+function normalizeRotasyonName(name) {
+  return String(name || '').trim().toLocaleLowerCase('tr-TR');
+}
+function detectRotasyonOverlapsForResident(r) {
+  const store = (r && r.rotasyonlar && typeof r.rotasyonlar === 'object' && !Array.isArray(r.rotasyonlar)) ? r.rotasyonlar : {};
+  const entries = Object.keys(store).map(key => {
+    const range = parseRangeKeyForMaintenance(key);
+    const raw = store[key];
+    const name = raw && typeof raw === 'object' ? (raw.name || '') : (typeof raw === 'string' ? raw : '');
+    const type = raw && typeof raw === 'object' ? (raw.type || '') : '';
+    return { key, range, name: String(name || '').trim(), type: String(type || '').trim(), normName: normalizeRotasyonName(name) };
+  }).filter(x => x.range && (x.name || x.type));
+  const out = [];
+  for (let i = 0; i < entries.length; i++) {
+    for (let j = i + 1; j < entries.length; j++) {
+      const a = entries[i], b = entries[j];
+      const sameName = a.normName && a.normName === b.normName;
+      const sameType = (a.type || '') === (b.type || '');
+      if (sameName && sameType && rangesOverlap(a.range, b.range)) {
+        out.push({
+          resident: r.name || '(isimsiz)',
+          name: a.name || b.name || 'Rotasyon',
+          type: a.type || b.type || '—',
+          first: a.key,
+          second: b.key,
+          firstLabel: formatRangeFull(a.range),
+          secondLabel: formatRangeFull(b.range)
+        });
+      }
+    }
+  }
+  return out;
+}
 function analyzeMaintenanceData(data) {
   const residents = (data && Array.isArray(data.residents)) ? data.residents : [];
   const report = {
@@ -2688,7 +2760,9 @@ function analyzeMaintenanceData(data) {
     duplicateSameDayAcrossStores: 0,
     totalDateKeys: 0,
     cleanedEstimate: 0,
-    largestResidents: []
+    largestResidents: [],
+    rotasyonOverlapCount: 0,
+    rotasyonOverlaps: []
   };
   const legacyNames = ['nobetDates', 'nobetIstemiyorumDates', 'nobetIstenmiyorDates', 'noDutyDates'];
   const storeNames = ['dates', 'izinDates', 'kongreDates', 'rotasyonDates', 'dersDates', 'raporDates', 'ozelNobetDates'];
@@ -2714,9 +2788,15 @@ function analyzeMaintenanceData(data) {
     const uniqueCount = new Set(allKeys).size;
     report.duplicateSameDayAcrossStores += Math.max(0, allKeys.length - uniqueCount);
     report.cleanedEstimate += legacyForResident + report.oldMixedDatesCount;
+    const overlaps = detectRotasyonOverlapsForResident(r);
+    if (overlaps.length) {
+      report.rotasyonOverlapCount += overlaps.length;
+      report.rotasyonOverlaps.push(...overlaps);
+    }
     report.largestResidents.push({ name: r.name || '(boş)', bytes: residentBytes, totalKeys: allKeys.length, uniqueKeys: uniqueCount });
   });
   report.largestResidents = report.largestResidents.sort((a,b) => b.bytes - a.bytes).slice(0, 8);
+  report.rotasyonOverlaps = report.rotasyonOverlaps.slice(0, 30);
   return report;
 }
 function normalizeDateStoreObject(obj) {
@@ -2791,6 +2871,14 @@ function renderAdminMaintenance() {
       <td>${x.uniqueKeys}</td>
     </tr>
   `).join('');
+  const overlapRows = a.rotasyonOverlaps.map(x => `
+    <tr>
+      <td><b>${escapeHtml(x.resident)}</b></td>
+      <td>${escapeHtml(x.name)} <span class="muted">(${escapeHtml(x.type)})</span></td>
+      <td>${escapeHtml(x.firstLabel)}</td>
+      <td>${escapeHtml(x.secondLabel)}</td>
+    </tr>
+  `).join('');
   return `
     <h2>Sistem bakımı</h2>
     <p class="muted mb-2">Bu alan mevcut Firebase verisini silmeden incelemek, JSON yedek almak ve eski/boş/ara sürümden kalmış alanları genel admin onayıyla temizlemek içindir.</p>
@@ -2807,6 +2895,7 @@ function renderAdminMaintenance() {
       <div class="maintenance-card"><div class="maintenance-num">${a.oldMixedDatesCount}</div><div class="maintenance-label">Eski dates içinde kalan izin/kongre/rotasyon</div></div>
       <div class="maintenance-card"><div class="maintenance-num">${a.falseOrInvalidDateKeys}</div><div class="maintenance-label">Boş/false/geçersiz tarih anahtarı</div></div>
       <div class="maintenance-card"><div class="maintenance-num">${a.legacyFieldCount}</div><div class="maintenance-label">Ara sürümden kalmış eski alan kaydı</div></div>
+      <div class="maintenance-card"><div class="maintenance-num">${a.rotasyonOverlapCount}</div><div class="maintenance-label">Aynı isim/tür çakışan rotasyon slotu</div></div>
     </div>
     <h3 class="mt-3">En büyük asistan kayıtları</h3>
     <div class="summary-box status-table-wrap">
@@ -2815,7 +2904,14 @@ function renderAdminMaintenance() {
         <tbody>${largestRows || '<tr><td colspan="4">Kayıt yok.</td></tr>'}</tbody>
       </table>
     </div>
-    <p class="muted mt-3" style="font-size:12px;">Not: Aynı günün farklı takvimlerde görünmesi her zaman hata değildir. Örneğin bir gün hem iç rotasyon hem de nöbet istememe olarak seçilmiş olabilir. Temizlik bunu silmez; sadece eski/boş alanları sadeleştirir.</p>
+    <h3 class="mt-3">Çakışan rotasyon slotları</h3>
+    <div class="summary-box status-table-wrap">
+      <table class="maintenance-table">
+        <thead><tr><th>Asistan</th><th>Rotasyon</th><th>1. kayıt</th><th>2. kayıt</th></tr></thead>
+        <tbody>${overlapRows || '<tr><td colspan="4">Aynı isim ve aynı iç/dış türünde çakışan rotasyon slotu yok.</td></tr>'}</tbody>
+      </table>
+    </div>
+    <p class="muted mt-3" style="font-size:12px;">Not: Aynı günün farklı takvimlerde görünmesi her zaman hata değildir. Örneğin bir gün hem iç rotasyon hem de nöbet istememe olarak seçilmiş olabilir. Temizlik bunu silmez; sadece eski/boş alanları sadeleştirir. Çakışan rotasyon tablosu sadece uyarıdır; otomatik silme yapmaz.</p>
   `;
 }
 
@@ -3246,6 +3342,7 @@ function handleLogin() {
 async function start() {
   render();
   try {
+    await loadFirebaseModules();
     await signInAnonymously(fbAuth);
 
     let firstSnapshot = true;
