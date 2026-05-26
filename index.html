@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-<script type="text/javascript" src="https://gc.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=3BUhX1FuK7-20ZO8-DjIvlz6yOpolduc1RAxFjjPn2P1OgsVPbcJN7PWovLqTS7v88QR3swUx98PQ4Mea0-bc7JYzHZfu4oHY_W_yxuGPUIJC8BkHc1QMOZaiZuxkINCv1lBPB7S_E_0q1dcGB7TK8eKylEf_MrMZPDCc7e9JZq6jLVfdkaDuHTYDsL6EcWZi9-yPiu7rTmy5sZGW3O3saX4mAdKakBJbN2AK3aQW1nkDUg6qrryISeVdKN_giY2GONjVl-GPTZ_xZPwSWPt6FVnRq4dErv_qKBZQyDaep4IOJI9NOxzKzmyw0r4Cnog" charset="UTF-8"></script><style>
+<script type="text/javascript" src="https://gc.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=OQUD9l0f0E7MzursoMZobOejnIJKTh4U6pdTkXHk9Kd2F4jHb1H-uApjWQxO7eu3PiNrys45MGAtROscKJ8CKJyJdV6p0AEdv1yLWjIjBwwBbewr1MVzzRI7Lc4yn6EH0eKkL6S7MCniktYmkfqszAfLxHr3ZjDKye50nnZarKf1JPmT71vEUHuYlS9S-1GTpBu31NOhCKLHFLbL96sc2-OPBLxlPyrbJUsH0sc9Hl0BNYEZPBniL1znpMPj3KOxzayoH3EajKzma23D91sCM2cB14beeQK3eHBSYPZEGvhDs02I_e-qnXM3c9IzxbxA" charset="UTF-8"></script><style>
 :root {
   --cream: #FBF8F3;
   --paper: #F4EFE6;
@@ -917,7 +917,16 @@ select option { background: #0E1118; color: #F4F7FB; }
   border-left-color: #FFD166;
   background: linear-gradient(135deg, rgba(255,209,102,0.12), rgba(60,223,255,0.04));
 }
+.status-table-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.status-table { min-width: 760px; }
 @media (max-width: 520px) {
+  body { padding: 10px 6px; }
+  .container { padding: 18px 12px; border-radius: 10px; }
+  .tab { padding: 9px 12px; }
+  .status-table { min-width: 720px; }
   .password-grid { grid-template-columns: 1fr; }
 }
 
@@ -953,6 +962,13 @@ const DOC_REF = doc(fbDb, "combined", "state");
 /* ============================================================
    NÖBET & ROTASYON BİRLEŞİK SİSTEM
    ============================================================ */
+
+function cloneData(obj) {
+  // iOS/Safari'nin eski sürümlerinde structuredClone olmayabiliyor;
+  // bu durumda JSON tabanlı güvenli kopyalama kullanılır.
+  if (typeof structuredClone === 'function') return structuredClone(obj);
+  return JSON.parse(JSON.stringify(obj));
+}
 
 const DEFAULT_NAMES = ['ESM','KK','EK','ED','MA','GH','GA','GD','SM','ŞT','AH','SY','PB','OC','BK','MÇ','SÇ','İK','GÇ','BCO','BGB'];
 const EMPTY_SLOT_COUNT = 20;
@@ -1047,7 +1063,7 @@ const state = {
   // Current navigated year/month for resident calendar
   navYear: new Date().getFullYear(),
   navMonth: new Date().getMonth() + 1,
-  data: structuredClone(DEFAULT_DATA),
+  data: cloneData(DEFAULT_DATA),
   loginError: '',
   flash: '',
   fbStatus: 'loading',
@@ -1459,21 +1475,59 @@ function countDatesSince(isoList, startIso) {
 }
 
 function uniqueIsoList(lists) {
-  return Array.from(new Set(lists.flat().filter(Boolean))).sort();
+  const combined = [];
+  (lists || []).forEach(list => {
+    if (Array.isArray(list)) {
+      list.forEach(item => { if (item) combined.push(item); });
+    } else if (list) {
+      combined.push(list);
+    }
+  });
+  return Array.from(new Set(combined)).sort();
 }
 function isoListWithinRange(isoList, range) {
   return isoList.filter(iso => iso >= range.start && iso <= range.end).sort();
 }
-function getExternalRotasyonIsoList(r) {
+function getRotasyonIsoListByType(r, type) {
   ensureResidentShape(r);
   const rotIso = getCategoryIsoList(r, 'rotasyon');
   const ranges = buildDateRanges(rotIso);
   const out = [];
   ranges.forEach(range => {
     const d = getRotasyonDetail(r, range);
-    if (d.type === 'Dış') out.push(...isoListWithinRange(rotIso, range));
+    if (d.type === type) out.push(...isoListWithinRange(rotIso, range));
   });
   return uniqueIsoList([out]);
+}
+function getExternalRotasyonIsoList(r) {
+  return getRotasyonIsoListByType(r, 'Dış');
+}
+function getInternalRotasyonIsoList(r) {
+  return getRotasyonIsoListByType(r, 'İç');
+}
+function countRangesInMonth(isoList, year, month) {
+  const prefix = ym(year, month);
+  return buildDateRanges(isoList).filter(range =>
+    isoListWithinRange(isoList, range).some(iso => iso.startsWith(prefix))
+  ).length;
+}
+function countRangesInYear(isoList, year) {
+  return buildDateRanges(isoList).filter(range =>
+    isoListWithinRange(isoList, range).some(iso => parseYmd(iso).year === year)
+  ).length;
+}
+function countRangesSince(isoList, startIso) {
+  const scoped = startIso ? isoList.filter(iso => iso >= startIso) : isoList.slice();
+  return buildDateRanges(scoped).length;
+}
+function rotasyonStatusText(r, list, year, month, scope) {
+  const days = scope === 'month' ? countDatesInMonth(list, year, month)
+    : scope === 'year' ? countDatesInYear(list, year)
+    : (r.assistantStartDate ? countDatesSince(list, r.assistantStartDate) : list.length);
+  const ranges = scope === 'month' ? countRangesInMonth(list, year, month)
+    : scope === 'year' ? countRangesInYear(list, year)
+    : countRangesSince(list, r.assistantStartDate);
+  return `${ranges} rotasyon (${days} gün)`;
 }
 function getNoDutyIsoList(r) {
   return uniqueIsoList([
@@ -1965,6 +2019,7 @@ function renderAdminSummary() {
     const kongreDates = getCategoryIsoList(r, 'kongre');
     const rotDates = getCategoryIsoList(r, 'rotasyon');
     const disRotDates = getExternalRotasyonIsoList(r);
+    const icRotDates = getInternalRotasyonIsoList(r);
     const dersDates = getCategoryIsoList(r, 'ders');
     const raporDates = getCategoryIsoList(r, 'rapor');
     const ozelNobetDates = getCategoryIsoList(r, 'ozelnobet');
@@ -1987,7 +2042,7 @@ function renderAdminSummary() {
           <div class="res-line" style="margin-left: 0;"><span class="res-label">↳ İzin</span> ${fmtOrEmpty(izinDates)}</div>
           <div class="res-line" style="margin-left: 0;"><span class="res-label">↳ Dış rotasyon</span> ${fmtOrEmpty(disRotDates)}</div>
         </div>
-        <div class="res-line" style="margin-top: 8px;"><span class="res-label">Rotasyon</span> ${fmtOrEmpty(rotDates)}</div>
+        ${icRotDates.length > 0 ? `<div class="res-line" style="margin-top: 8px;"><span class="res-label">İç rotasyon</span> ${fmtOrEmpty(icRotDates)}</div>` : ''}
         <div class="res-line"><span class="res-label">Ders</span> ${fmtOrEmpty(dersDates)}</div>
         <div class="res-line"><span class="res-label">Rapor</span> ${fmtOrEmpty(raporDates)}</div>
         <div class="res-line"><span class="res-label">Özel nöbet</span> ${fmtOrEmpty(ozelNobetDates)}</div>
@@ -2020,6 +2075,7 @@ function buildPlainAll(residents) {
     const izinIso    = getCategoryIsoList(r, 'izin');
     const rotIso     = getCategoryIsoList(r, 'rotasyon');
     const disRotIso  = getExternalRotasyonIsoList(r);
+    const icRotIso   = getInternalRotasyonIsoList(r);
     const dersIso    = getCategoryIsoList(r, 'ders');
     const raporIso   = getCategoryIsoList(r, 'rapor');
     const ozelIso    = getCategoryIsoList(r, 'ozelnobet');
@@ -2028,7 +2084,7 @@ function buildPlainAll(residents) {
     lines.push(`    ↳ Kongre:        ${kongreIso.length ? plainByMonth(kongreIso) : '—'}`);
     lines.push(`    ↳ İzin:          ${izinIso.length ? plainByMonth(izinIso) : '—'}`);
     lines.push(`    ↳ Dış rotasyon:  ${disRotIso.length ? plainByMonth(disRotIso) : '—'}`);
-    lines.push(`  Rotasyon:         ${rotIso.length ? plainByMonth(rotIso) : '—'}`);
+    if (icRotIso.length) lines.push(`  İç rotasyon:      ${plainByMonth(icRotIso)}`);
     lines.push(`  Ders:             ${dersIso.length ? plainByMonth(dersIso) : '—'}`);
     lines.push(`  Rapor:            ${raporIso.length ? plainByMonth(raporIso) : '—'}`);
     lines.push(`  Özel nöbet:       ${ozelIso.length ? plainByMonth(ozelIso) : '—'}`);
@@ -2140,18 +2196,21 @@ function renderAdminStatus() {
     const cats = ['izin', 'kongre', 'rotasyon', 'ders', 'rapor'];
     const cells = cats.map(cat => {
       const list = getCategoryIsoList(r, cat);
+      const noun = statusCountNoun(cat);
+      const hint = statusDateHint(list, curYear);
+      if (cat === 'rotasyon') {
+        return `<td class="status-metrics"><span class="status-pill">Bu ay: ${rotasyonStatusText(r, list, curYear, curMonth, 'month')}</span><span class="status-pill">${curYear} ${noun}: ${rotasyonStatusText(r, list, curYear, curMonth, 'year')}</span><span class="status-pill">Toplam ${noun}: ${rotasyonStatusText(r, list, curYear, curMonth, 'total')}</span>${hint ? `<span class="status-note">${escapeHtml(hint)}</span>` : ''}</td>`;
+      }
       const m = countDatesInMonth(list, curYear, curMonth);
       const y = countDatesInYear(list, curYear);
       const all = r.assistantStartDate ? countDatesSince(list, r.assistantStartDate) : list.length;
-      const noun = statusCountNoun(cat);
-      const hint = statusDateHint(list, curYear);
       return `<td class="status-metrics"><span class="status-pill">Bu ay: ${m}</span><span class="status-pill">${curYear} ${noun}: ${y}</span><span class="status-pill">Toplam ${noun}: ${all}</span>${hint ? `<span class="status-note">${escapeHtml(hint)}</span>` : ''}</td>`;
     }).join('');
     return `<tr><td><b>${escapeHtml(r.name)}</b><br><span class="muted">Başlama: ${r.assistantStartDate ? escapeHtml(formatIsoDateTR(r.assistantStartDate)) : '—'}</span></td>${cells}</tr>`;
   }).join('');
   return `
     <h2>Asistan durumu bildirir ekran</h2>
-    <p class="muted mb-2"><b>Bu ay</b> = içinde bulunulan ay (${MONTHS_TR[curMonth - 1]} ${curYear}); <b>${curYear} izin/kongre/rotasyon</b> = seçili takvim yılı içindeki gün sayısıdır, asistanlık senesi değildir. Asistanın kaçıncı senesinde/ayında olduğunu görmek için <b>Asistanlık senesi</b> sekmesini kullanın. <b>Toplam</b> = asistanlığa başlama tarihi varsa o tarihten itibaren, yoksa tüm kayıtlar.</p>
+    <p class="muted mb-2"><b>Bu ay</b> = içinde bulunulan ay (${MONTHS_TR[curMonth - 1]} ${curYear}); <b>${curYear} izin/kongre/ders/rapor</b> = seçili takvim yılı içindeki gün sayısıdır; <b>rotasyon</b> ise rotasyon parsel sayısı ve parantez içinde toplam gün olarak gösterilir. Bu bilgi asistanlık senesi değildir. Asistanın kaçıncı senesinde/ayında olduğunu görmek için <b>Asistanlık senesi</b> sekmesini kullanın. <b>Toplam</b> = asistanlığa başlama tarihi varsa o tarihten itibaren, yoksa tüm kayıtlar.</p>
     <div class="summary-box status-table-wrap">
       <table class="status-table">
         <thead><tr><th>Asistan</th><th>İzin</th><th>Kongre</th><th>Rotasyon</th><th>Ders</th><th>Rapor</th></tr></thead>
@@ -2170,10 +2229,14 @@ function buildPlainStatus(residents, year, month) {
     lines.push(`${r.name} (başlama: ${r.assistantStartDate || '—'}):`);
     ['izin','kongre','rotasyon','ders','rapor'].forEach(cat => {
       const list = getCategoryIsoList(r, cat);
+      const noun = statusCountNoun(cat);
+      if (cat === 'rotasyon') {
+        lines.push(`  ${CATEGORIES[cat].label}: Bu ay ${rotasyonStatusText(r, list, year, month, 'month')}, ${year} ${noun} ${rotasyonStatusText(r, list, year, month, 'year')}, Toplam ${noun} ${rotasyonStatusText(r, list, year, month, 'total')}`);
+        return;
+      }
       const m = countDatesInMonth(list, year, month);
       const y = countDatesInYear(list, year);
       const all = r.assistantStartDate ? countDatesSince(list, r.assistantStartDate) : list.length;
-      const noun = statusCountNoun(cat);
       lines.push(`  ${CATEGORIES[cat].label}: Bu ay ${m}, ${year} ${noun} ${y}, Toplam ${noun} ${all}`);
     });
   });
@@ -2884,8 +2947,8 @@ async function start() {
     onSnapshot(DOC_REF, async (snap) => {
       if (snap.exists()) {
         const data = snap.data();
-        if (!data.admin) data.admin = structuredClone(DEFAULT_DATA.admin);
-        if (!data.nobetDeadline) data.nobetDeadline = structuredClone(DEFAULT_DATA.nobetDeadline);
+        if (!data.admin) data.admin = cloneData(DEFAULT_DATA.admin);
+        if (!data.nobetDeadline) data.nobetDeadline = cloneData(DEFAULT_DATA.nobetDeadline);
         if (!data.residents) data.residents = buildDefaultResidents();
         // sanity: ensure each resident has old and new fields
         let normalizedChanged = false;
@@ -2896,7 +2959,7 @@ async function start() {
           catch (e) { console.error('Veri normalizasyonu kaydedilemedi:', e); }
         }
       } else if (firstSnapshot) {
-        state.data = structuredClone(DEFAULT_DATA);
+        state.data = cloneData(DEFAULT_DATA);
         try {
           await setDoc(DOC_REF, state.data);
         } catch (e) {
