@@ -1,0 +1,2741 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Asistan Bilgi Sistemi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --cream: #FBF8F3;
+  --paper: #F4EFE6;
+  --ink: #1A1612;
+  --ink-soft: #5C534A;
+  --ink-muted: #8B8278;
+  --teal: #1F4F4A;
+  --teal-dark: #163936;
+  --coral: #C7484B;
+  --coral-light: #F0DADB;
+  --purple: #6B4A8B;
+  --purple-light: #E8DEF0;
+  --amber: #C7763B;
+  --yellow: #D4A52A;
+  --yellow-light: #F5EAC4;
+  --green: #4A6B3F;
+  --indigo: #3F4C6B;
+  --indigo-light: #DDE3EE;
+  --blue: #2F6F8F;
+  --blue-light: #DCEBF2;
+  --red: #B83E42;
+  --red-light: #F2DADB;
+  --line: #D9D2C5;
+  --line-light: #ECE6D8;
+  --shadow: 0 1px 3px rgba(26, 22, 18, 0.04), 0 4px 16px rgba(26, 22, 18, 0.04);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: var(--cream); color: var(--ink); }
+body {
+  font-family: 'IBM Plex Sans', -apple-system, sans-serif;
+  font-size: 15px;
+  line-height: 1.5;
+  min-height: 100vh;
+  padding: 24px 16px;
+  -webkit-font-smoothing: antialiased;
+}
+h1, h2, h3 {
+  font-family: 'Fraunces', Georgia, serif;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+h1 { font-size: 30px; line-height: 1.1; font-variation-settings: "opsz" 72; }
+h2 { font-size: 21px; line-height: 1.2; margin-bottom: 14px; }
+h3 { font-size: 16px; line-height: 1.3; font-weight: 600; font-family: 'IBM Plex Sans', sans-serif; letter-spacing: 0; }
+p { color: var(--ink-soft); }
+code { font-family: 'IBM Plex Mono', monospace; font-size: 0.9em; background: var(--paper); padding: 1px 5px; border-radius: 3px; }
+.container {
+  max-width: 920px;
+  margin: 0 auto;
+  background: white;
+  border-radius: 14px;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--line-light);
+  padding: 32px 28px;
+}
+.header-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding-bottom: 20px;
+  margin-bottom: 24px;
+  border-bottom: 1px solid var(--line-light);
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.header-bar .subtitle {
+  font-size: 13px;
+  color: var(--ink-muted);
+  margin-top: 4px;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+.user-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  background: var(--paper);
+  border-radius: 999px;
+  font-size: 13px;
+  color: var(--ink-soft);
+}
+.user-chip .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); }
+
+/* Forms */
+.form-group { margin-bottom: 16px; }
+label {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink-soft);
+  margin-bottom: 6px;
+  letter-spacing: 0.01em;
+}
+input[type="text"], input[type="password"], input[type="date"], input[type="number"], select, textarea {
+  width: 100%;
+  padding: 11px 14px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  font-size: 15px;
+  font-family: inherit;
+  background: white;
+  color: var(--ink);
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+textarea { resize: vertical; min-height: 60px; line-height: 1.5; }
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--teal);
+  box-shadow: 0 0 0 3px rgba(31, 79, 74, 0.1);
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: var(--teal);
+  color: white;
+  border: none;
+  padding: 11px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: inherit;
+  transition: background 0.15s, transform 0.05s;
+}
+.btn:hover { background: var(--teal-dark); }
+.btn:active { transform: translateY(1px); }
+.btn-secondary { background: white; color: var(--ink); border: 1px solid var(--line); }
+.btn-secondary:hover { background: var(--paper); }
+.btn-danger { background: var(--coral); }
+.btn-danger:hover { background: #a73a3d; }
+.btn-ghost { background: transparent; color: var(--ink-soft); padding: 8px 12px; }
+.btn-ghost:hover { background: var(--paper); }
+.btn-sm { padding: 7px 12px; font-size: 13px; }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* Alerts */
+.alert {
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  font-size: 14px;
+  border-left: 3px solid;
+}
+.alert-info { background: var(--paper); border-color: var(--teal); color: var(--ink-soft); }
+.alert-warning { background: #FBF1E3; border-color: var(--amber); color: #6B4517; }
+.alert-success { background: #EDF1E8; border-color: var(--green); color: #2F4226; }
+.alert-danger { background: var(--coral-light); border-color: var(--coral); color: #6B2024; }
+
+/* Tabs */
+.tab-bar {
+  display: flex;
+  gap: 4px;
+  border-bottom: 1px solid var(--line-light);
+  margin-bottom: 24px;
+  overflow-x: auto;
+}
+.tab {
+  padding: 10px 16px;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  color: var(--ink-soft);
+  font-weight: 500;
+  font-size: 14px;
+  white-space: nowrap;
+  background: none;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  font-family: inherit;
+}
+.tab.active { border-bottom-color: var(--teal); color: var(--ink); }
+.tab:hover { color: var(--ink); }
+.tab.cat-nobet.active { border-bottom-color: var(--coral); }
+.tab.cat-izin.active { border-bottom-color: var(--purple); }
+.tab.cat-kongre.active { border-bottom-color: var(--yellow); }
+.tab.cat-rotasyon.active { border-bottom-color: var(--indigo); }
+.tab.cat-ders.active { border-bottom-color: var(--blue); }
+.tab.cat-rapor.active { border-bottom-color: var(--red); }
+.tab.cat-ozelnobet.active { border-bottom-color: var(--green); }
+
+/* Month navigator */
+.month-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin: 16px 0;
+  padding: 14px;
+  background: var(--paper);
+  border-radius: 10px;
+}
+.month-nav select {
+  width: auto;
+  padding: 8px 12px;
+  font-size: 14px;
+  font-weight: 600;
+}
+.month-nav button {
+  background: white;
+  border: 1px solid var(--line);
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 16px;
+  color: var(--ink);
+  font-family: inherit;
+}
+.month-nav button:hover { background: var(--cream); }
+
+/* Calendar */
+.calendar-wrap {
+  background: var(--paper);
+  border-radius: 12px;
+  padding: 18px 14px;
+  margin: 14px 0;
+}
+.calendar-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  color: var(--ink-soft);
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 5px;
+}
+.day-header {
+  text-align: center;
+  font-size: 11px;
+  color: var(--ink-muted);
+  padding: 4px 0;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.day-cell {
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: white;
+  border: 1px solid var(--line-light);
+  border-radius: 7px;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 14px;
+  color: var(--ink);
+  user-select: none;
+  transition: all 0.12s;
+  font-variant-numeric: tabular-nums;
+  position: relative;
+}
+.day-cell:hover { transform: translateY(-1px); }
+.day-cell.empty {
+  background: transparent;
+  border: none;
+  cursor: default;
+}
+.day-cell.empty:hover { transform: none; }
+.day-cell.weekend { color: var(--ink-muted); }
+.day-cell.locked { cursor: not-allowed; opacity: 0.75; }
+.day-cell.locked:hover { transform: none; }
+
+/* Category colors */
+.day-cell.cat-nobet { background: var(--coral); color: white; border-color: var(--coral); }
+.day-cell.cat-izin { background: var(--purple); color: white; border-color: var(--purple); }
+.day-cell.cat-kongre { background: var(--yellow); color: var(--ink); border-color: var(--yellow); }
+.day-cell.cat-rotasyon { background: var(--indigo); color: white; border-color: var(--indigo); }
+.day-cell.cat-ders { background: var(--blue); color: white; border-color: var(--blue); }
+.day-cell.cat-rapor { background: var(--red); color: white; border-color: var(--red); }
+.day-cell.cat-ozelnobet { background: var(--green); color: white; border-color: var(--green); }
+
+.day-cell:hover:not(.locked):not(.empty) {
+  filter: brightness(0.95);
+}
+
+/* Multi-category indicator dots */
+.day-cell .indicators {
+  position: absolute;
+  bottom: 3px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 2px;
+}
+.day-cell .indicators .dot {
+  width: 4px; height: 4px; border-radius: 50%;
+  background: rgba(255, 255, 255, 0.7);
+}
+
+/* Legend */
+.legend {
+  display: flex;
+  gap: 14px;
+  font-size: 12px;
+  color: var(--ink-muted);
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+.legend-item { display: flex; align-items: center; gap: 6px; }
+.legend-swatch { width: 14px; height: 14px; border-radius: 4px; }
+.legend-swatch.cat-nobet { background: var(--coral); }
+.legend-swatch.cat-izin { background: var(--purple); }
+.legend-swatch.cat-kongre { background: var(--yellow); }
+.legend-swatch.cat-rotasyon { background: var(--indigo); }
+.legend-swatch.cat-ders { background: var(--blue); }
+.legend-swatch.cat-rapor { background: var(--red); }
+.legend-swatch.cat-ozelnobet { background: var(--green); }
+
+/* Range input */
+.range-row {
+  display: flex;
+  gap: 10px;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  margin-top: 14px;
+  padding: 14px;
+  background: var(--paper);
+  border-radius: 10px;
+}
+.range-row .range-inputs { display: flex; gap: 8px; align-items: flex-end; flex: 1; min-width: 200px; flex-wrap: wrap; }
+.range-row label { margin-bottom: 4px; font-size: 12px; }
+.range-row input { padding: 8px 10px; font-size: 14px; }
+
+/* Kongre details section */
+.kongre-section {
+  margin-top: 16px;
+  padding: 14px;
+  background: var(--yellow-light);
+  border-radius: 10px;
+  border-left: 3px solid var(--yellow);
+}
+.kongre-section h3 { margin-bottom: 8px; font-size: 14px; }
+
+
+.detail-section {
+  margin-top: 16px;
+  padding: 14px;
+  background: var(--paper);
+  border-radius: 10px;
+  border-left: 3px solid var(--teal);
+}
+.detail-section.kongre-detail { background: var(--yellow-light); border-left-color: var(--yellow); }
+.detail-section.ders-detail { background: var(--blue-light); border-left-color: var(--blue); }
+.detail-section.rapor-detail { background: var(--red-light); border-left-color: var(--red); }
+.detail-section.ozelnobet-detail { background: #E7F0E4; border-left-color: var(--green); }
+.detail-section.rotasyon-detail { background: var(--indigo-light); border-left-color: var(--indigo); }
+.detail-section h3 { margin-bottom: 8px; font-size: 14px; }
+.detail-row {
+  display: grid;
+  grid-template-columns: minmax(170px, 0.8fr) minmax(200px, 1.2fr);
+  gap: 10px;
+  align-items: center;
+  padding: 10px 0;
+  border-top: 1px solid rgba(26, 22, 18, 0.08);
+}
+.detail-row.detail-row-rotasyon {
+  grid-template-columns: minmax(170px, 0.8fr) minmax(190px, 1.1fr) minmax(130px, 0.7fr);
+}
+.detail-row:first-of-type { border-top: none; }
+.detail-date-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: white;
+  border: 1px solid var(--line-light);
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-size: 13px;
+  color: var(--ink-soft);
+  font-weight: 600;
+}
+.detail-name-input, .detail-type-select { padding: 9px 12px !important; font-size: 14px !important; }
+.detail-type-select { min-width: 130px; }
+.report-stats, .status-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 10px;
+  margin-top: 12px;
+}
+.stat-card {
+  background: white;
+  border: 1px solid var(--line-light);
+  border-radius: 10px;
+  padding: 12px;
+}
+.stat-card .stat-num {
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: 24px;
+  line-height: 1;
+  color: var(--ink);
+}
+.stat-card .stat-label {
+  font-size: 12px;
+  color: var(--ink-muted);
+  margin-top: 4px;
+}
+.status-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  margin-top: 12px;
+}
+.status-table th, .status-table td {
+  border-bottom: 1px solid var(--line-light);
+  padding: 9px 8px;
+  text-align: left;
+  vertical-align: top;
+}
+.status-table th {
+  color: var(--ink-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-size: 11px;
+  font-weight: 700;
+}
+.status-pill {
+  display: inline-flex;
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: var(--paper);
+  margin: 1px 2px 1px 0;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Resident table */
+.resident-list {
+  background: white;
+  border: 1px solid var(--line-light);
+  border-radius: 10px;
+  overflow: hidden;
+}
+.resident-row {
+  display: flex;
+  align-items: center;
+  padding: 14px 16px;
+  gap: 14px;
+  border-bottom: 1px solid var(--line-light);
+}
+.resident-row:last-child { border-bottom: none; }
+.resident-row .name { font-weight: 600; min-width: 70px; font-variant-caps: small-caps; letter-spacing: 0.05em; }
+.resident-row .meta { color: var(--ink-muted); font-size: 13px; flex: 1; }
+.checkbox-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 13px;
+  color: var(--ink-soft);
+}
+.checkbox-wrap input[type="checkbox"] { width: 18px; height: 18px; cursor: pointer; accent-color: var(--green); }
+
+/* Slot list (admin editable) */
+.slot-list-header {
+  display: grid;
+  grid-template-columns: 28px 1fr 110px 80px 36px;
+  gap: 10px;
+  padding: 8px 14px;
+  font-size: 12px;
+  color: var(--ink-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 600;
+}
+.slot-list {
+  background: white;
+  border: 1px solid var(--line-light);
+  border-radius: 10px;
+  overflow: hidden;
+}
+.slot-row {
+  display: grid;
+  grid-template-columns: 28px 1fr 110px 80px 36px;
+  gap: 10px;
+  align-items: center;
+  padding: 8px 14px;
+  border-bottom: 1px solid var(--line-light);
+}
+.slot-row:last-child { border-bottom: none; }
+.slot-row:hover { background: #FCFAF5; }
+.slot-num {
+  font-size: 12px;
+  color: var(--ink-muted);
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.slot-name, .slot-pass {
+  padding: 7px 10px;
+  font-size: 14px;
+  border: 1px solid transparent;
+  background: transparent;
+  border-radius: 6px;
+  font-family: inherit;
+  color: var(--ink);
+}
+.slot-name:hover, .slot-pass:hover { border-color: var(--line); background: white; }
+.slot-name:focus, .slot-pass:focus {
+  outline: none;
+  border-color: var(--teal);
+  background: white;
+  box-shadow: 0 0 0 2px rgba(31, 79, 74, 0.1);
+}
+.slot-name { font-weight: 600; }
+.slot-pass { font-family: monospace; }
+.slot-meta { font-size: 12px; color: var(--ink-muted); }
+.clear-slot-btn {
+  padding: 4px 8px !important;
+  font-size: 14px !important;
+  color: var(--ink-muted);
+}
+.clear-slot-btn:hover { color: var(--coral); background: var(--coral-light); }
+
+/* Summary */
+.summary-box {
+  background: var(--paper);
+  border: 1px solid var(--line-light);
+  border-radius: 10px;
+  padding: 20px;
+  font-size: 13.5px;
+  line-height: 1.7;
+  margin-top: 12px;
+  font-variant-numeric: tabular-nums;
+}
+.summary-resident { margin-bottom: 14px; padding-bottom: 12px; border-bottom: 1px dashed var(--line); }
+.summary-resident:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+.summary-resident .res-name {
+  font-weight: 700;
+  color: var(--ink);
+  font-variant-caps: small-caps;
+  letter-spacing: 0.06em;
+  font-size: 15px;
+  margin-bottom: 4px;
+}
+.summary-resident .res-line {
+  margin-left: 12px;
+  color: var(--ink-soft);
+  font-size: 13px;
+}
+.summary-resident .res-label {
+  font-weight: 600;
+  color: var(--ink-muted);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  display: inline-block;
+  min-width: 70px;
+}
+.summary-resident .empty-tok { color: var(--ink-muted); font-style: italic; }
+.summary-resident .kongre-note {
+  margin-left: 12px;
+  color: var(--ink-soft);
+  font-size: 12px;
+  font-style: italic;
+}
+
+/* Month-section in summary */
+.month-section { margin-bottom: 8px; }
+.month-section .mname {
+  font-weight: 600;
+  color: var(--ink-muted);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* Utility */
+.muted { color: var(--ink-muted); font-size: 13px; }
+.row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.row-between { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+.mt-3 { margin-top: 20px; }
+.mt-4 { margin-top: 28px; }
+.mb-2 { margin-bottom: 12px; }
+.divider { height: 1px; background: var(--line-light); margin: 24px 0; }
+.cred-hint {
+  background: var(--paper);
+  border-radius: 8px;
+  padding: 12px 14px;
+  font-size: 12px;
+  color: var(--ink-muted);
+  margin-top: 16px;
+  font-family: monospace;
+  line-height: 1.7;
+}
+.cred-hint b { color: var(--ink-soft); }
+.cred-hint .role { display: block; margin-top: 4px; }
+
+/* Spinner */
+.spinner {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 2px solid var(--line);
+  border-top-color: var(--teal);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  vertical-align: middle;
+  margin-right: 8px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.sync-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  background: #EDF1E8;
+  border-radius: 999px;
+  font-size: 11px;
+  color: #4A6B3F;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+.sync-chip::before {
+  content: '';
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--green);
+  animation: pulse 2s infinite;
+}
+@keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+@media (max-width: 520px) {
+  body { padding: 12px 8px; }
+  .container { padding: 22px 18px; }
+  h1 { font-size: 24px; }
+  .day-cell { font-size: 13px; border-radius: 5px; }
+  .calendar-grid { gap: 4px; }
+  .slot-list-header { display: none; }
+  .slot-row { grid-template-columns: 24px 1fr 90px 30px; }
+  .slot-row .slot-meta { display: none; }
+  .detail-row { grid-template-columns: 1fr; }
+}
+
+
+/* ============================================================
+   RETRO DARK SCI-FI THEME OVERRIDES
+   ============================================================ */
+:root {
+  --cream: #06070B;
+  --paper: #0E1118;
+  --ink: #F4F7FB;
+  --ink-soft: #B8C2D6;
+  --ink-muted: #748098;
+  --teal: #18E0C3;
+  --teal-dark: #0CA993;
+  --coral: #FF4D6D;
+  --coral-light: rgba(255, 77, 109, 0.16);
+  --purple: #B46CFF;
+  --purple-light: rgba(180, 108, 255, 0.16);
+  --amber: #FF9F1C;
+  --yellow: #FFD166;
+  --yellow-light: rgba(255, 209, 102, 0.14);
+  --green: #78FFB7;
+  --indigo: #6A7CFF;
+  --indigo-light: rgba(106, 124, 255, 0.16);
+  --blue: #3CDFFF;
+  --blue-light: rgba(60, 223, 255, 0.15);
+  --red: #FF375F;
+  --red-light: rgba(255, 55, 95, 0.15);
+  --line: rgba(157, 186, 255, 0.20);
+  --line-light: rgba(157, 186, 255, 0.11);
+  --shadow: 0 20px 70px rgba(0,0,0,0.55), 0 0 0 1px rgba(96, 140, 255, 0.08), inset 0 1px 0 rgba(255,255,255,0.04);
+}
+html, body { background: #05060A; color: var(--ink); }
+body {
+  background:
+    radial-gradient(circle at 12% 8%, rgba(60, 223, 255, 0.14) 0, transparent 24%),
+    radial-gradient(circle at 87% 12%, rgba(180, 108, 255, 0.13) 0, transparent 25%),
+    radial-gradient(circle at 80% 88%, rgba(255, 77, 109, 0.10) 0, transparent 28%),
+    linear-gradient(135deg, #05060A 0%, #090B12 42%, #11131C 100%);
+  color: var(--ink);
+  min-height: 100vh;
+}
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.018) 1px, transparent 1px);
+  background-size: 42px 42px;
+  mask-image: radial-gradient(circle at center, rgba(0,0,0,0.9), transparent 78%);
+  opacity: 0.55;
+}
+.container {
+  background:
+    linear-gradient(145deg, rgba(22, 27, 40, 0.92), rgba(9, 11, 17, 0.96)),
+    radial-gradient(circle at top left, rgba(24, 224, 195, 0.13), transparent 38%);
+  border: 1px solid rgba(131, 165, 255, 0.18);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(8px);
+}
+.header-bar {
+  border-bottom: 1px solid rgba(131, 165, 255, 0.16);
+}
+h1 {
+  color: var(--ink);
+  text-shadow: 0 0 24px rgba(60, 223, 255, 0.20);
+}
+.header-bar h1 {
+  display: inline-block;
+  background: linear-gradient(90deg, #F4F7FB 0%, #75F7E8 36%, #B46CFF 72%, #FFD166 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+h2, h3 { color: #F7FAFF; }
+p, .muted, label { color: var(--ink-soft); }
+code {
+  background: rgba(255,255,255,0.06);
+  color: #9AF6E9;
+  border: 1px solid rgba(154,246,233,0.16);
+}
+.user-chip, .sync-chip {
+  background: linear-gradient(135deg, rgba(60,223,255,0.12), rgba(180,108,255,0.11));
+  border: 1px solid rgba(131, 165, 255, 0.20);
+  color: #DDE7FF;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.05), 0 0 18px rgba(60,223,255,0.07);
+}
+.user-chip .dot, .sync-chip::before { background: #78FFB7; box-shadow: 0 0 10px rgba(120,255,183,0.75); }
+input[type="text"], input[type="password"], input[type="date"], input[type="number"], select, textarea {
+  background: linear-gradient(180deg, rgba(12,15,23,0.96), rgba(18,22,32,0.94));
+  color: #F4F7FB;
+  border: 1px solid rgba(131, 165, 255, 0.22);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.035);
+}
+input::placeholder, textarea::placeholder { color: rgba(184,194,214,0.55); }
+input:focus, select:focus, textarea:focus {
+  border-color: rgba(24,224,195,0.82);
+  box-shadow: 0 0 0 3px rgba(24,224,195,0.12), 0 0 24px rgba(24,224,195,0.13);
+}
+select option { background: #0E1118; color: #F4F7FB; }
+.btn {
+  background: linear-gradient(135deg, #14C8B0 0%, #5B6DFF 100%);
+  color: white;
+  box-shadow: 0 8px 22px rgba(20,200,176,0.18), inset 0 1px 0 rgba(255,255,255,0.18);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+.btn:hover { background: linear-gradient(135deg, #20E7C9 0%, #7685FF 100%); }
+.btn-secondary {
+  background: linear-gradient(135deg, rgba(255,255,255,0.06), rgba(255,255,255,0.025));
+  color: #DDE7FF;
+  border: 1px solid rgba(131, 165, 255, 0.24);
+  box-shadow: none;
+}
+.btn-secondary:hover { background: rgba(131,165,255,0.12); }
+.btn-danger { background: linear-gradient(135deg, #FF375F, #A42AFF); }
+.btn-danger:hover { background: linear-gradient(135deg, #FF5877, #B951FF); }
+.btn-ghost { color: #C6D0E8; background: rgba(255,255,255,0.025); box-shadow: none; }
+.btn-ghost:hover { background: rgba(255,255,255,0.075); }
+.alert {
+  background: linear-gradient(135deg, rgba(255,255,255,0.055), rgba(255,255,255,0.025));
+  border: 1px solid rgba(131,165,255,0.14);
+  border-left-width: 3px;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
+}
+.alert-info { border-left-color: #3CDFFF; color: #C9D6F0; }
+.alert-warning { border-left-color: #FFD166; color: #FFE3A3; }
+.alert-success { border-left-color: #78FFB7; color: #C9FFE0; }
+.alert-danger { border-left-color: #FF4D6D; color: #FFC7D1; }
+.tab-bar {
+  background: rgba(6,8,14,0.78);
+  border: 1px solid rgba(131,165,255,0.13);
+  border-radius: 14px;
+  padding: 6px;
+  gap: 6px;
+}
+.tab {
+  border: 1px solid transparent;
+  border-radius: 10px;
+  color: #98A4BD;
+  background: linear-gradient(180deg, rgba(255,255,255,0.025), rgba(255,255,255,0.01));
+  margin-bottom: 0;
+}
+.tab:hover { color: #F4F7FB; background: rgba(255,255,255,0.055); }
+.tab.active {
+  color: #FFFFFF;
+  border-color: rgba(60,223,255,0.28);
+  background: linear-gradient(135deg, rgba(60,223,255,0.14), rgba(180,108,255,0.12));
+  box-shadow: 0 0 20px rgba(60,223,255,0.12), inset 0 1px 0 rgba(255,255,255,0.08);
+}
+.tab.cat-nobet.active { background: linear-gradient(135deg, rgba(255,77,109,0.28), rgba(255,159,28,0.10)); border-color: rgba(255,77,109,0.35); }
+.tab.cat-izin.active { background: linear-gradient(135deg, rgba(180,108,255,0.28), rgba(60,223,255,0.09)); border-color: rgba(180,108,255,0.36); }
+.tab.cat-kongre.active { background: linear-gradient(135deg, rgba(255,209,102,0.30), rgba(255,159,28,0.10)); border-color: rgba(255,209,102,0.45); }
+.tab.cat-rotasyon.active { background: linear-gradient(135deg, rgba(106,124,255,0.30), rgba(24,224,195,0.09)); border-color: rgba(106,124,255,0.38); }
+.tab.cat-ders.active { background: linear-gradient(135deg, rgba(60,223,255,0.28), rgba(24,224,195,0.10)); border-color: rgba(60,223,255,0.40); }
+.tab.cat-rapor.active { background: linear-gradient(135deg, rgba(255,55,95,0.32), rgba(180,108,255,0.10)); border-color: rgba(255,55,95,0.45); }
+.tab.cat-ozelnobet.active { background: linear-gradient(135deg, rgba(120,255,183,0.30), rgba(255,209,102,0.10)); border-color: rgba(120,255,183,0.45); }
+.month-nav, .calendar-wrap, .summary-box, .range-row, .report-stats .stat-card, .resident-list, .slot-list, .detail-section, .kongre-section, .status-table-wrap {
+  background: linear-gradient(145deg, rgba(14,18,29,0.92), rgba(8,10,16,0.86));
+  border: 1px solid rgba(131,165,255,0.14);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.035), 0 14px 36px rgba(0,0,0,0.22);
+}
+.month-nav button {
+  background: rgba(255,255,255,0.055);
+  border: 1px solid rgba(131,165,255,0.20);
+  color: #F4F7FB;
+}
+.month-nav button:hover { background: rgba(60,223,255,0.12); }
+.day-header { color: #7F8DA8; }
+.day-cell {
+  background: linear-gradient(180deg, rgba(18,22,32,0.95), rgba(11,13,20,0.95));
+  color: #DDE7FF;
+  border: 1px solid rgba(131,165,255,0.13);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.03);
+}
+.day-cell:hover { box-shadow: 0 0 18px rgba(60,223,255,0.14), inset 0 1px 0 rgba(255,255,255,0.08); }
+.day-cell.weekend { color: #79859F; background: linear-gradient(180deg, rgba(12,15,22,0.9), rgba(7,9,14,0.9)); }
+.day-cell.empty { background: transparent; box-shadow: none; }
+.day-cell.cat-nobet { background: linear-gradient(135deg, #FF375F, #8F1D44); color: #fff; border-color: rgba(255,77,109,0.65); box-shadow: 0 0 16px rgba(255,77,109,0.28); }
+.day-cell.cat-izin { background: linear-gradient(135deg, #B46CFF, #5030B6); color: #fff; border-color: rgba(180,108,255,0.65); box-shadow: 0 0 16px rgba(180,108,255,0.25); }
+.day-cell.cat-kongre { background: linear-gradient(135deg, #FFD166, #B87300); color: #17120A; border-color: rgba(255,209,102,0.65); box-shadow: 0 0 16px rgba(255,209,102,0.25); }
+.day-cell.cat-rotasyon { background: linear-gradient(135deg, #6A7CFF, #23318D); color: #fff; border-color: rgba(106,124,255,0.65); box-shadow: 0 0 16px rgba(106,124,255,0.25); }
+.day-cell.cat-ders { background: linear-gradient(135deg, #3CDFFF, #087B91); color: #031014; border-color: rgba(60,223,255,0.65); box-shadow: 0 0 16px rgba(60,223,255,0.24); }
+.day-cell.cat-rapor { background: linear-gradient(135deg, #FF4D6D, #9C1535); color: #fff; border-color: rgba(255,77,109,0.70); box-shadow: 0 0 18px rgba(255,77,109,0.28); }
+.day-cell.cat-ozelnobet { background: linear-gradient(135deg, #78FFB7, #1B7B55); color: #03140C; border-color: rgba(120,255,183,0.70); box-shadow: 0 0 18px rgba(120,255,183,0.24); }
+.day-cell.soft-locked { opacity: 0.38; cursor: not-allowed; background: linear-gradient(180deg, rgba(9,11,17,0.75), rgba(5,6,10,0.85)); border-style: dashed; }
+.legend-swatch.cat-nobet { background: linear-gradient(135deg, #FF375F, #8F1D44); }
+.legend-swatch.cat-izin { background: linear-gradient(135deg, #B46CFF, #5030B6); }
+.legend-swatch.cat-kongre { background: linear-gradient(135deg, #FFD166, #B87300); }
+.legend-swatch.cat-rotasyon { background: linear-gradient(135deg, #6A7CFF, #23318D); }
+.legend-swatch.cat-ders { background: linear-gradient(135deg, #3CDFFF, #087B91); }
+.legend-swatch.cat-rapor { background: linear-gradient(135deg, #FF4D6D, #9C1535); }
+.legend-swatch.cat-ozelnobet { background: linear-gradient(135deg, #78FFB7, #1B7B55); }
+.resident-row, .slot-row {
+  border-bottom-color: rgba(131,165,255,0.11);
+  background: transparent;
+}
+.resident-row:hover, .slot-row:hover { background: rgba(60,223,255,0.045); }
+.slot-name, .slot-pass {
+  color: #F4F7FB;
+  background: rgba(255,255,255,0.025);
+}
+.slot-name:hover, .slot-pass:hover { background: rgba(255,255,255,0.055); border-color: rgba(131,165,255,0.20); }
+.summary-resident { border-bottom-color: rgba(131,165,255,0.12); }
+.summary-resident .res-name { color: #F7FAFF; text-shadow: 0 0 14px rgba(60,223,255,0.10); }
+.summary-resident .res-line, .summary-resident .kongre-note { color: #B8C2D6; }
+.summary-resident .res-label { color: #7F8DA8; }
+.empty-tok { color: #748098 !important; }
+.detail-section.kongre-detail { border-left: 3px solid #FFD166; }
+.detail-section.rotasyon-detail { border-left: 3px solid #6A7CFF; }
+.detail-section.ders-detail { border-left: 3px solid #3CDFFF; }
+.detail-section.rapor-detail { border-left: 3px solid #FF4D6D; }
+.detail-section.ozelnobet-detail { border-left: 3px solid #78FFB7; }
+.detail-date-badge {
+  background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03));
+  border: 1px solid rgba(131,165,255,0.16);
+  color: #DDE7FF;
+}
+.stat-card .stat-num { color: #75F7E8; text-shadow: 0 0 18px rgba(117,247,232,0.22); }
+.stat-card .stat-label { color: #9AA8C2; }
+.status-table th { color: #75F7E8; background: rgba(60,223,255,0.06); }
+.status-table td { border-top-color: rgba(131,165,255,0.10); color: #DDE7FF; }
+.divider { background: rgba(131,165,255,0.13); }
+.security-note {
+  margin-top: 16px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, rgba(60,223,255,0.08), rgba(180,108,255,0.05));
+  border: 1px solid rgba(131,165,255,0.16);
+  color: #AEBAD3;
+  font-size: 12px;
+}
+.password-card {
+  margin-top: 24px;
+  padding: 16px;
+  border-radius: 12px;
+  background: linear-gradient(145deg, rgba(14,18,29,0.92), rgba(8,10,16,0.86));
+  border: 1px solid rgba(131,165,255,0.14);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.035), 0 14px 36px rgba(0,0,0,0.22);
+}
+.password-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(180px, 1fr));
+  gap: 12px;
+}
+.admin-edit-banner {
+  border-left-color: #FFD166;
+  background: linear-gradient(135deg, rgba(255,209,102,0.12), rgba(60,223,255,0.04));
+}
+@media (max-width: 520px) {
+  .password-grid { grid-template-columns: 1fr; }
+}
+
+</style>
+</head>
+<body>
+<div class="container" id="app"></div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
+import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js";
+import { getFirestore, doc, onSnapshot, setDoc } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
+
+/* ============================================================
+   👇 BURAYI FIREBASE CONSOLE'DAN ALDIĞINIZ CONFIG İLE DEĞİŞTİRİN
+   ============================================================ */
+const firebaseConfig = {
+  apiKey: "AIzaSyAj3_XfNMnm0TpLApW6l8hH1cFl76CkqtQ",
+  authDomain: "sahasistanlari.firebaseapp.com",
+  projectId: "sahasistanlari",
+  storageBucket: "sahasistanlari.firebasestorage.app",
+  messagingSenderId: "775447939012",
+  appId: "1:775447939012:web:4eeb37038b7ad19ab68691",
+  measurementId: "G-CMR4HNERET"
+};
+/* ============================================================ */
+
+const fbApp = initializeApp(firebaseConfig);
+const fbAuth = getAuth(fbApp);
+const fbDb = getFirestore(fbApp);
+const DOC_REF = doc(fbDb, "combined", "state");
+
+/* ============================================================
+   NÖBET & ROTASYON BİRLEŞİK SİSTEM
+   ============================================================ */
+
+const DEFAULT_NAMES = ['ESM','KK','EK','ED','MA','GH','GA','GD','SM','ŞT','AH','SY','PB','OC','BK','MÇ','SÇ','İK','GÇ','BCO','BGB'];
+const EMPTY_SLOT_COUNT = 20;
+const MONTHS_TR = ['Ocak','Şubat','Mart','Nisan','Mayıs','Haziran','Temmuz','Ağustos','Eylül','Ekim','Kasım','Aralık'];
+const DAYS_TR_SHORT = ['Pt','Sa','Ça','Pe','Cu','Ct','Pz'];
+const YEAR_MIN = 2016, YEAR_MAX = 2036;
+
+// Nöbet istememe eski dates objesinde tutulur.
+// İzin, kongre, rotasyon, ders, rapor ve özel nöbet istekleri ayrı takvim objelerinde tutulur.
+// Böylece örn. iç rotasyon + nöbet istememe aynı gün/ay içinde çakışmadan girilebilir.
+const CATEGORIES = {
+  nobet:    { color: 'cat-nobet',    label: 'Nöbet İstenmiyor', group: 'main' },
+  izin:     { color: 'cat-izin',     label: 'İzin', group: 'main' },
+  kongre:   { color: 'cat-kongre',   label: 'Kongre', group: 'main' },
+  rotasyon: { color: 'cat-rotasyon', label: 'Rotasyonlar', group: 'main' },
+  ders:     { color: 'cat-ders',     label: 'Katılınan Dersler', group: 'extra' },
+  rapor:    { color: 'cat-rapor',    label: 'Rapor', group: 'extra' },
+  ozelnobet:{ color: 'cat-ozelnobet',label: 'Özel Nöbet İstekleri', group: 'extra' },
+};
+const RESIDENT_TABS = ['nobet', 'izin', 'kongre', 'rotasyon', 'ders', 'rapor', 'ozelnobet'];
+const MAIN_CATEGORIES = ['nobet', 'izin', 'kongre', 'rotasyon'];
+
+function buildDefaultResidents() {
+  const list = [];
+  DEFAULT_NAMES.forEach((n, i) => {
+    list.push(makeBlankResident('r' + (i + 1), n));
+  });
+  for (let i = 0; i < EMPTY_SLOT_COUNT; i++) {
+    list.push(makeBlankResident('r' + (DEFAULT_NAMES.length + i + 1), ''));
+  }
+  return list;
+}
+function makeBlankResident(id, name) {
+  return {
+    id, name, password: '1234',
+    submitted: false,
+    // dates: eski/ana nöbet istememe takvimi; yeni sürümde yalnızca "nobet" tutar
+    dates: {},
+    // İzin, kongre ve rotasyon artık birbirinden ve nöbet istememeden bağımsız takvimlerdir
+    izinDates: {},
+    kongreDates: {},
+    rotasyonDates: {},
+    // kongreler: { "2026-03-05_2026-03-07": "Kongre adı" }
+    kongreler: {},
+    // rotasyonlar: { "2026-03-05_2026-03-20": { name: "Klinik Nörofizyoloji", type: "İç" } }
+    rotasyonlar: {},
+    // Katılınan ders/eğitim takvimi ve adları
+    dersDates: {},
+    dersler: {},
+    // Rapor takvimi ve asistanlığa başlama tarihi
+    raporDates: {},
+    assistantStartDate: '',
+    // Özel nöbet istekleri ayrı takvim olarak tutulur
+    ozelNobetDates: {}
+  };
+}
+
+const DEFAULT_DATA = {
+  admin: {
+    fullPassword: 'admin123',
+    viewerPassword: 'view123',
+    rotViewerPassword: 'rot123',
+    nobetViewerPassword: 'nob123'
+  },
+  // Nöbet sekmesi için süre tanıma
+  nobetDeadline: {
+    enabled: false,    // tik atılı mı
+    days: 5,           // kaç gün
+    startedAt: null    // ISO datetime — sıfırlandığında set edilir
+  },
+  residents: buildDefaultResidents()
+};
+
+async function saveData() {
+  try {
+    await setDoc(DOC_REF, state.data);
+  } catch (e) {
+    console.error('Firestore yazma hatası:', e);
+    alert('Kayıt başarısız: ' + e.message);
+  }
+}
+
+const state = {
+  view: 'login',
+  currentUser: null,    // resident object | 'admin-full' | 'admin-view' | 'admin-rot' | 'admin-nobet'
+  // Resident category tab
+  residentCat: 'nobet',
+  // Admin tab
+  adminTab: 'summary',
+  // Admin summary subcategory
+  adminSummaryView: 'nobet-combined', // 'nobet-combined' | 'rotasyon' | 'breakdown'
+  // Current navigated year/month for resident calendar
+  navYear: new Date().getFullYear(),
+  navMonth: new Date().getMonth() + 1,
+  data: structuredClone(DEFAULT_DATA),
+  loginError: '',
+  flash: '',
+  fbStatus: 'loading',
+  fbError: '',
+  adminEditingResidentId: null,
+  adminReturnTab: 'submissions',
+};
+
+/* ============================================================
+   Date utilities
+   ============================================================ */
+function daysInMonth(year, month) { return new Date(year, month, 0).getDate(); }
+function firstDayMon0(year, month) {
+  const js = new Date(year, month - 1, 1).getDay();
+  return (js + 6) % 7;
+}
+function ymd(year, month, day) {
+  return `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+}
+function parseYmd(iso) {
+  const [y, m, d] = iso.split('-').map(Number);
+  return { year: y, month: m, day: d };
+}
+function ym(year, month) {
+  return `${year}-${String(month).padStart(2, '0')}`;
+}
+function isWeekend(year, month, day) {
+  const js = new Date(year, month - 1, day).getDay();
+  return js === 0 || js === 6;
+}
+// [5,6,7,9,14,15] -> "5-7, 9, 14-15"
+function formatRanges(days) {
+  if (days.length === 0) return '';
+  const sorted = days.slice().sort((a, b) => a - b);
+  const ranges = [];
+  let start = sorted[0], end = sorted[0];
+  for (let i = 1; i < sorted.length; i++) {
+    if (sorted[i] === end + 1) end = sorted[i];
+    else { ranges.push(start === end ? `${start}` : `${start}–${end}`); start = end = sorted[i]; }
+  }
+  ranges.push(start === end ? `${start}` : `${start}–${end}`);
+  return ranges.join(', ');
+}
+
+/* ---------- Utility ---------- */
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+}
+function newId() { return 'r' + Math.random().toString(36).slice(2, 8); }
+
+// Role helpers
+function isAdminFull()   { return state.currentUser === 'admin-full'; }
+function isAdminView()   { return state.currentUser === 'admin-view'; }
+function isAdminRot()    { return state.currentUser === 'admin-rot'; }
+function isAdminNobet()  { return state.currentUser === 'admin-nobet'; }
+function isAnyAdmin()    { return isAdminFull() || isAdminView() || isAdminRot() || isAdminNobet(); }
+function canEdit()       { return isAdminFull(); }
+function canSeePasswords() { return isAdminFull(); }
+function isAdminEditingResident() {
+  return !!state.adminEditingResidentId && typeof state.currentUser === 'object' && state.currentUser && state.currentUser.id === state.adminEditingResidentId;
+}
+function canEditCurrentResident(r) {
+  return typeof r === 'object' && r && (!r.submitted || isAdminEditingResident());
+}
+
+// Nöbet sekmesi deadline'i: süresi geçti mi?
+function nobetDeadlineInfo() {
+  const d = state.data.nobetDeadline;
+  if (!d || !d.enabled || !d.startedAt) {
+    return { enabled: false, expired: false, daysLeft: null, endsAt: null };
+  }
+  const start = new Date(d.startedAt);
+  const end = new Date(start.getTime() + d.days * 24 * 60 * 60 * 1000);
+  const now = new Date();
+  const msLeft = end - now;
+  const daysLeft = Math.ceil(msLeft / (24 * 60 * 60 * 1000));
+  return {
+    enabled: true,
+    expired: msLeft <= 0,
+    daysLeft: daysLeft,
+    endsAt: end
+  };
+}
+function fmtDateTimeTR(d) {
+  if (!d) return '—';
+  return d.toLocaleString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+}
+
+function isExtraCategory(cat) {
+  return cat !== 'nobet';
+}
+function ensureResidentShape(r) {
+  if (!r.dates || typeof r.dates !== 'object' || Array.isArray(r.dates)) r.dates = {};
+  if (!r.izinDates || typeof r.izinDates !== 'object' || Array.isArray(r.izinDates)) r.izinDates = {};
+  if (!r.kongreDates || typeof r.kongreDates !== 'object' || Array.isArray(r.kongreDates)) r.kongreDates = {};
+  if (!r.rotasyonDates || typeof r.rotasyonDates !== 'object' || Array.isArray(r.rotasyonDates)) r.rotasyonDates = {};
+  if (!r.kongreler || typeof r.kongreler !== 'object' || Array.isArray(r.kongreler)) r.kongreler = {};
+  if (!r.rotasyonlar || typeof r.rotasyonlar !== 'object' || Array.isArray(r.rotasyonlar)) r.rotasyonlar = {};
+  if (!r.dersDates || typeof r.dersDates !== 'object' || Array.isArray(r.dersDates)) r.dersDates = {};
+  if (!r.dersler || typeof r.dersler !== 'object' || Array.isArray(r.dersler)) r.dersler = {};
+  if (!r.raporDates || typeof r.raporDates !== 'object' || Array.isArray(r.raporDates)) r.raporDates = {};
+  if (!r.ozelNobetDates || typeof r.ozelNobetDates !== 'object' || Array.isArray(r.ozelNobetDates)) r.ozelNobetDates = {};
+  if (typeof r.assistantStartDate !== 'string') r.assistantStartDate = '';
+
+  // Geriye uyumluluk: önceki sürümlerde izin/kongre/rotasyon aynı r.dates objesinde tutuluyordu.
+  // Bu eski kayıtları yeni bağımsız takvimlere taşı ve r.dates içinde sadece nöbet istememe kalsın.
+  Object.keys(r.dates).forEach(iso => {
+    const cat = r.dates[iso];
+    if (cat === 'izin') {
+      r.izinDates[iso] = true;
+      delete r.dates[iso];
+    } else if (cat === 'kongre') {
+      r.kongreDates[iso] = true;
+      delete r.dates[iso];
+    } else if (cat === 'rotasyon') {
+      r.rotasyonDates[iso] = true;
+      delete r.dates[iso];
+    } else if (cat !== 'nobet') {
+      delete r.dates[iso];
+    }
+  });
+}
+function extraDateStore(r, cat) {
+  ensureResidentShape(r);
+  if (cat === 'izin') return r.izinDates;
+  if (cat === 'kongre') return r.kongreDates;
+  if (cat === 'rotasyon') return r.rotasyonDates;
+  if (cat === 'ders') return r.dersDates;
+  if (cat === 'rapor') return r.raporDates;
+  if (cat === 'ozelnobet') return r.ozelNobetDates;
+  return null;
+}
+function detailStore(r, cat) {
+  ensureResidentShape(r);
+  if (cat === 'kongre') return r.kongreler;
+  if (cat === 'rotasyon') return r.rotasyonlar;
+  if (cat === 'ders') return r.dersler;
+  return null;
+}
+function getCategoryIsoList(r, cat) {
+  ensureResidentShape(r);
+  if (cat === 'nobet') return Object.entries(r.dates).filter(([_, c]) => c === 'nobet').map(([iso]) => iso);
+  const store = extraDateStore(r, cat);
+  if (store) return Object.keys(store).filter(iso => !!store[iso]);
+  return [];
+}
+function countAllSelections(r) {
+  ensureResidentShape(r);
+  return getCategoryIsoList(r, 'nobet').length
+    + Object.keys(r.izinDates).filter(k => r.izinDates[k]).length
+    + Object.keys(r.kongreDates).filter(k => r.kongreDates[k]).length
+    + Object.keys(r.rotasyonDates).filter(k => r.rotasyonDates[k]).length
+    + Object.keys(r.dersDates).filter(k => r.dersDates[k]).length
+    + Object.keys(r.raporDates).filter(k => r.raporDates[k]).length
+    + Object.keys(r.ozelNobetDates).filter(k => r.ozelNobetDates[k]).length;
+}
+function isWeekendIso(iso) {
+  const { year, month, day } = parseYmd(iso);
+  return isWeekend(year, month, day);
+}
+function specialWeekendCountInMonth(r, year, month) {
+  ensureResidentShape(r);
+  const prefix = ym(year, month);
+  return Object.keys(r.ozelNobetDates).filter(iso => r.ozelNobetDates[iso] && iso.startsWith(prefix) && isWeekendIso(iso)).length;
+}
+function specialWeekdayCountInMonth(r, year, month) {
+  ensureResidentShape(r);
+  const prefix = ym(year, month);
+  return Object.keys(r.ozelNobetDates).filter(iso => r.ozelNobetDates[iso] && iso.startsWith(prefix) && !isWeekendIso(iso)).length;
+}
+function clearSpecialWeekdaysInMonth(r, year, month) {
+  ensureResidentShape(r);
+  const prefix = ym(year, month);
+  const removed = [];
+  Object.keys(r.ozelNobetDates).forEach(iso => {
+    if (iso.startsWith(prefix) && !isWeekendIso(iso)) {
+      delete r.ozelNobetDates[iso];
+      removed.push(iso);
+    }
+  });
+  return removed;
+}
+function clearSpecialMonth(r, year, month) {
+  ensureResidentShape(r);
+  const prefix = ym(year, month);
+  const removed = [];
+  Object.keys(r.ozelNobetDates).forEach(iso => {
+    if (iso.startsWith(prefix)) {
+      delete r.ozelNobetDates[iso];
+      removed.push(iso);
+    }
+  });
+  return removed;
+}
+function toggleSpecialNobetDate(r, iso) {
+  ensureResidentShape(r);
+  const { year, month } = parseYmd(iso);
+  const isWknd = isWeekendIso(iso);
+  if (r.ozelNobetDates[iso]) {
+    delete r.ozelNobetDates[iso];
+    if (isWknd && specialWeekendCountInMonth(r, year, month) < 3) {
+      const cleared = clearSpecialWeekdaysInMonth(r, year, month);
+      if (cleared.length) alert('Bu ay hafta sonu özel nöbet seçimi 3 günün altına düştüğü için hafta içi özel nöbet seçimleri sıfırlandı.');
+    }
+    return true;
+  }
+  if (!isWknd && specialWeekendCountInMonth(r, year, month) < 3) {
+    alert('Hafta içi özel nöbet günü seçebilmek için aynı ay içinde önce en az 3 hafta sonu özel nöbet günü seçmelisiniz.');
+    return false;
+  }
+  r.ozelNobetDates[iso] = true;
+  return true;
+}
+
+function toggleCategoryDate(r, cat, iso) {
+  ensureResidentShape(r);
+  if (cat === 'ozelnobet') {
+    toggleSpecialNobetDate(r, iso);
+    return;
+  }
+  if (cat !== 'nobet') {
+    const store = extraDateStore(r, cat);
+    if (!store) return;
+    if (store[iso]) delete store[iso];
+    else store[iso] = true;
+    return;
+  }
+  const cur = r.dates[iso];
+  if (cur === 'nobet') delete r.dates[iso];
+  else r.dates[iso] = 'nobet';
+}
+function clearMonthForCategory(r, cat, year, month) {
+  ensureResidentShape(r);
+  const prefix = ym(year, month);
+  const removed = [];
+  if (cat !== 'nobet') {
+    const store = extraDateStore(r, cat);
+    if (!store) return removed;
+    Object.keys(store).forEach(iso => {
+      if (iso.startsWith(prefix)) { delete store[iso]; removed.push(iso); }
+    });
+  } else {
+    Object.keys(r.dates).forEach(iso => {
+      if (iso.startsWith(prefix) && r.dates[iso] === 'nobet') { delete r.dates[iso]; removed.push(iso); }
+    });
+  }
+  return removed;
+}
+function addDaysIso(iso, n) {
+  const { year, month, day } = parseYmd(iso);
+  const dt = new Date(year, month - 1, day);
+  dt.setDate(dt.getDate() + n);
+  return ymd(dt.getFullYear(), dt.getMonth() + 1, dt.getDate());
+}
+function buildDateRanges(isoList) {
+  const sorted = isoList.slice().sort();
+  if (!sorted.length) return [];
+  const ranges = [];
+  let start = sorted[0], end = sorted[0];
+  for (let i = 1; i < sorted.length; i++) {
+    if (sorted[i] === addDaysIso(end, 1)) end = sorted[i];
+    else { ranges.push({ start, end }); start = end = sorted[i]; }
+  }
+  ranges.push({ start, end });
+  return ranges;
+}
+function rangeKey(range) {
+  return range.start === range.end ? range.start : `${range.start}_${range.end}`;
+}
+function formatFullDate(iso) {
+  const { year, month, day } = parseYmd(iso);
+  return `${day} ${MONTHS_TR[month - 1]} ${year}`;
+}
+function formatRangeFull(range) {
+  if (range.start === range.end) return formatFullDate(range.start);
+  const a = parseYmd(range.start), b = parseYmd(range.end);
+  if (a.year === b.year && a.month === b.month) return `${a.day}–${b.day} ${MONTHS_TR[a.month - 1]} ${a.year}`;
+  return `${formatFullDate(range.start)} – ${formatFullDate(range.end)}`;
+}
+function getDetailText(r, cat, range, allRanges) {
+  const store = detailStore(r, cat);
+  if (!store) return '';
+  const key = rangeKey(range);
+  const raw = store[key];
+  if (typeof raw === 'string') return raw;
+  if (raw && typeof raw === 'object' && typeof raw.name === 'string') return raw.name;
+  // Eski sürümde kongre adı aylık tek metin olarak tutuluyordu; tek aralık varsa onu göster.
+  if (cat === 'kongre' && allRanges && allRanges.length === 1) {
+    const legacy = store[range.start.slice(0, 7)];
+    if (typeof legacy === 'string') return legacy;
+  }
+  return '';
+}
+function getRotasyonDetail(r, range) {
+  ensureResidentShape(r);
+  const store = detailStore(r, 'rotasyon');
+  const key = rangeKey(range);
+  const raw = store[key];
+  if (typeof raw === 'string') return { name: raw, type: '' };
+  if (raw && typeof raw === 'object') {
+    return { name: raw.name || '', type: raw.type || '' };
+  }
+  return { name: '', type: '' };
+}
+function setRotasyonDetailField(r, key, field, value) {
+  ensureResidentShape(r);
+  const store = detailStore(r, 'rotasyon');
+  const old = store[key];
+  const next = (old && typeof old === 'object') ? { ...old } : { name: typeof old === 'string' ? old : '', type: '' };
+  next[field] = value;
+  if (!next.name && !next.type) delete store[key];
+  else store[key] = next;
+}
+function getRotasyonTypeLabel(type) {
+  if (type === 'İç') return 'İç rotasyon';
+  if (type === 'Dış') return 'Dış rotasyon';
+  return '';
+}
+function countDatesInMonth(isoList, year, month) {
+  const prefix = ym(year, month);
+  return isoList.filter(iso => iso.startsWith(prefix)).length;
+}
+function countDatesInYear(isoList, year) {
+  return isoList.filter(iso => parseYmd(iso).year === year).length;
+}
+function countDatesSince(isoList, startIso) {
+  if (!startIso) return isoList.length;
+  return isoList.filter(iso => iso >= startIso).length;
+}
+
+function uniqueIsoList(lists) {
+  return Array.from(new Set(lists.flat().filter(Boolean))).sort();
+}
+function isoListWithinRange(isoList, range) {
+  return isoList.filter(iso => iso >= range.start && iso <= range.end).sort();
+}
+function getExternalRotasyonIsoList(r) {
+  ensureResidentShape(r);
+  const rotIso = getCategoryIsoList(r, 'rotasyon');
+  const ranges = buildDateRanges(rotIso);
+  const out = [];
+  ranges.forEach(range => {
+    const d = getRotasyonDetail(r, range);
+    if (d.type === 'Dış') out.push(...isoListWithinRange(rotIso, range));
+  });
+  return uniqueIsoList([out]);
+}
+function getNoDutyIsoList(r) {
+  return uniqueIsoList([
+    getCategoryIsoList(r, 'nobet'),
+    getCategoryIsoList(r, 'izin'),
+    getCategoryIsoList(r, 'kongre'),
+    getExternalRotasyonIsoList(r)
+  ]);
+}
+function escapeAttr(s) { return escapeHtml(s).replace(/`/g, '&#96;'); }
+
+/* ============================================================
+   RENDER
+   ============================================================ */
+function render() {
+  const app = document.getElementById('app');
+  if (state.fbStatus === 'loading') { app.innerHTML = renderLoading(); return; }
+  if (state.fbStatus === 'error')   { app.innerHTML = renderError(); return; }
+  if (state.view === 'login') app.innerHTML = renderLogin();
+  else if (state.view === 'resident') app.innerHTML = renderResident();
+  else if (state.view === 'admin') app.innerHTML = renderAdmin();
+  bindEvents();
+  state.flash = '';
+}
+
+function renderLoading() {
+  return `
+    <div class="header-bar">
+      <div>
+        <h1>Asistan Bilgi Sistemi</h1>
+        <div class="subtitle">Bağlanıyor...</div>
+      </div>
+    </div>
+    <div class="alert alert-info">
+      <span class="spinner"></span> Firebase'e bağlanılıyor, lütfen bekleyin...
+    </div>
+  `;
+}
+
+function renderError() {
+  return `
+    <div class="header-bar">
+      <div>
+        <h1>Bağlantı Hatası</h1>
+      </div>
+    </div>
+    <div class="alert alert-danger">
+      <b>Hata:</b> ${escapeHtml(state.fbError)}
+    </div>
+    <p class="muted mb-2">Olası nedenler:</p>
+    <ul style="padding-left: 22px; color: var(--ink-soft); line-height: 1.8;">
+      <li>HTML içindeki <code>firebaseConfig</code> yanlış veya eksik</li>
+      <li>Security Rules <code>/combined/</code> koleksiyonu için izin vermiyor</li>
+      <li>Anonymous Authentication aktifleştirilmemiş</li>
+      <li>İnternet bağlantısı yok</li>
+    </ul>
+    <button class="btn mt-3" onclick="location.reload()">Tekrar dene</button>
+  `;
+}
+
+/* ---------- LOGIN ---------- */
+function renderLogin() {
+  const named = state.data.residents.filter(r => r.name && r.name.trim());
+  const options = named.map(r =>
+    `<option value="${r.id}">${escapeHtml(r.name)}</option>`
+  ).join('');
+  return `
+    <div class="header-bar">
+      <div>
+        <h1>Asistan Bilgi Sistemi</h1>
+        <div class="subtitle">Nöroloji asistanları</div>
+      </div>
+      <span class="sync-chip">Senkron · Çevrimiçi</span>
+    </div>
+
+    <p class="mb-2">Tercihlerinizi girmek için giriş yapın.</p>
+
+    ${state.loginError ? `<div class="alert alert-danger">${escapeHtml(state.loginError)}</div>` : ''}
+
+    <div class="form-group">
+      <label for="loginUser">Kullanıcı</label>
+      <select id="loginUser">
+        <option value="">— Seçin —</option>
+        <optgroup label="Asistanlar">${options}</optgroup>
+        <optgroup label="Yönetici girişleri">
+          <option value="__admin_full__">Genel Yönetici (tam yetki)</option>
+          <option value="__admin_view__">Yönetici (sadece görüntüleme)</option>
+          <option value="__admin_rot__">Rotasyon görüntüleyici</option>
+          <option value="__admin_nobet__">Nöbet görüntüleyici</option>
+        </optgroup>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="loginPass">Şifre</label>
+      <input type="password" id="loginPass" autocomplete="current-password" placeholder="••••">
+    </div>
+
+    <button class="btn" id="loginBtn">Giriş Yap</button>
+
+    <div class="security-note">
+      Şifreler giriş ekranında gösterilmez. Asistan şifrelerini yalnızca ilgili asistan değiştirebilir; genel yönetici tüm asistan şifrelerini görebilir ve gerektiğinde değiştirebilir.
+    </div>
+  `;
+}
+
+/* ---------- RESIDENT VIEW ---------- */
+function renderResident() {
+  const r = state.currentUser;
+  ensureResidentShape(r);
+  const adminOverride = isAdminEditingResident();
+  const locked = r.submitted && !adminOverride;
+
+  const tabs = RESIDENT_TABS.map(cat => `
+    <button class="tab cat-${cat} ${state.residentCat === cat ? 'active' : ''}" data-cat="${cat}">
+      ${CATEGORIES[cat].label}
+    </button>
+  `).join('');
+
+  const currentCat = state.residentCat;
+  const isSeparateCalendar = isExtraCategory(currentCat);
+  const monthOptions = MONTHS_TR.map((n, i) =>
+    `<option value="${i + 1}" ${state.navMonth === (i + 1) ? 'selected' : ''}>${n}</option>`
+  ).join('');
+  const yearOptions = [];
+  for (let y = YEAR_MIN; y <= YEAR_MAX; y++) {
+    yearOptions.push(`<option value="${y}" ${state.navYear === y ? 'selected' : ''}>${y}</option>`);
+  }
+
+  const currentIsoList = getCategoryIsoList(r, currentCat);
+  const catCount = currentIsoList.length;
+  const totalCount = countAllSelections(r);
+  const calendarLocked = locked || (currentCat === 'nobet' && nobetDeadlineInfo().expired);
+
+  return `
+    <div class="header-bar">
+      <div>
+        <h1>${escapeHtml(r.name)} · Tercih Paneli</h1>
+        <div class="subtitle">Asistan</div>
+      </div>
+      <div class="row">
+        <span class="user-chip"><span class="dot"></span>${escapeHtml(r.name)}</span>
+        ${adminOverride ? `<button class="btn btn-secondary btn-sm" id="adminBackBtn">Yönetici paneline dön</button>` : ``}
+        <button class="btn btn-ghost btn-sm" id="logoutBtn">Çıkış</button>
+      </div>
+    </div>
+
+    ${adminOverride ? `<div class="alert alert-warning admin-edit-banner"><b>Genel yönetici düzenleme modu:</b> Bu asistanın kayıtlarını onay durumundan bağımsız olarak düzenleyebilirsiniz.</div>` : ''}
+    ${locked
+      ? `<div class="alert alert-success">Tercihleriniz <b>kaydedildi</b>. Değiştirmek için yöneticinizin onay kutusunu kaldırmasını isteyin.</div>`
+      : `<div class="alert alert-info">Sekmelerden birini seçip ilgili takvimde günleri işaretleyin. Her sekme kendi takviminde çalışır. İzin, kongre ve rotasyon artık birbirinin üzerine yazmaz. Kongre, rotasyon ve ders sekmelerinde seçtiğiniz her ayrı tarih aralığı için otomatik bilgi kutusu açılır. Özel nöbet isteklerinde hafta içi seçim, aynı ayda en az 3 hafta sonu seçildikten sonra açılır.</div>`}
+
+    <div class="tab-bar">${tabs}</div>
+
+    ${currentCat === 'nobet' ? renderNobetDeadlineBanner() : ''}
+    ${isSeparateCalendar ? `<div class="alert alert-info" style="font-size:13px;">Bu sekme ayrı takvim gibi çalışır; diğer sekmelerdeki seçimlerin üzerine yazmaz.</div>` : ''}
+
+    <div class="month-nav">
+      <button id="prevMonth" title="Önceki ay">‹</button>
+      <select id="navMonth">${monthOptions}</select>
+      <select id="navYear">${yearOptions}</select>
+      <button id="nextMonth" title="Sonraki ay">›</button>
+    </div>
+
+    <div class="calendar-wrap">
+      <div class="calendar-info">
+        <span><span style="color: var(--ink); font-weight: 600;">${CATEGORIES[currentCat].label}</span> için toplam: <b>${catCount}</b> gün · Tüm kayıtlar: <b>${totalCount}</b> gün</span>
+        ${calendarLocked ? '<span style="color: var(--coral);">🔒 Kilitli</span>' : '<span style="color: var(--green);">● Düzenleniyor</span>'}
+      </div>
+      <div class="calendar-grid" id="calendar">
+        ${renderCalendarCells(r, state.navYear, state.navMonth, calendarLocked, currentCat)}
+      </div>
+      ${renderLegend(currentCat)}
+    </div>
+
+    ${renderCategoryDetailSection(r, currentCat, locked)}
+    ${adminOverride ? `` : renderResidentPasswordSection(r)}
+
+    ${!locked ? `
+      <div class="mt-4 row-between">
+        <p class="muted">Şu anda aktif kategori: <b style="color: var(--ink);">${CATEGORIES[currentCat].label}</b>. Aynı güne tekrar tıklarsanız o seçimi temizler.</p>
+        <div class="row">
+          <button class="btn btn-secondary btn-sm" id="clearMonthCat">Bu ayın "${CATEGORIES[currentCat].label}" işaretlerini temizle</button>
+          <button class="btn" id="submitBtn">Kaydet ve Gönder</button>
+        </div>
+      </div>
+    ` : ''}
+  `;
+}
+
+
+function renderResidentPasswordSection(r) {
+  return `
+    <div class="password-card">
+      <h3>🔐 Bireysel şifre değiştir</h3>
+      <p class="muted mb-2" style="font-size:12px;">Yeni şifreniz giriş ekranında görünmez. Genel yönetici, gerektiğinde şifreyi asistan listesinden görebilir ve değiştirebilir.</p>
+      <div class="password-grid">
+        <div class="form-group">
+          <label for="ownNewPass">Yeni şifre</label>
+          <input type="password" id="ownNewPass" autocomplete="new-password" placeholder="Yeni şifre">
+        </div>
+        <div class="form-group">
+          <label for="ownNewPass2">Yeni şifre tekrar</label>
+          <input type="password" id="ownNewPass2" autocomplete="new-password" placeholder="Tekrar yazın">
+        </div>
+      </div>
+      <button class="btn btn-secondary btn-sm" id="saveOwnPasswordBtn">Şifremi güncelle</button>
+    </div>
+  `;
+}
+
+function renderNobetDeadlineBanner() {
+  const di = nobetDeadlineInfo();
+  if (!di.enabled) {
+    return `<div class="alert alert-info" style="font-size:13px;">⏱ Bu sekme için süre sınırı yok.</div>`;
+  }
+  if (di.expired) {
+    return `<div class="alert alert-danger"><b>⏱ Süre doldu.</b> Nöbet istenmeyen günler için veri girişi kapalı. Yöneticinin yeni dönem açması gerekiyor.</div>`;
+  }
+  return `<div class="alert alert-warning"><b>⏱ Süre tanımlı:</b> ${di.daysLeft} gün kaldı (bitiş: ${fmtDateTimeTR(di.endsAt)})</div>`;
+}
+
+function renderLegend(activeCat) {
+  if (activeCat === 'nobet') {
+    return `<div class="legend"><div class="legend-item"><span class="legend-swatch cat-nobet"></span>Nöbet istenmeyen gün</div></div>`;
+  }
+  if (activeCat === 'izin') {
+    return `<div class="legend"><div class="legend-item"><span class="legend-swatch cat-izin"></span>İzin günü</div></div>`;
+  }
+  if (activeCat === 'kongre') {
+    return `<div class="legend"><div class="legend-item"><span class="legend-swatch cat-kongre"></span>Kongre günü</div></div>`;
+  }
+  if (activeCat === 'rotasyon') {
+    return `<div class="legend"><div class="legend-item"><span class="legend-swatch cat-rotasyon"></span>Rotasyon günü</div><div class="legend-item"><span style="opacity:.7">İç/Dış</span> Bilgi kutusundan seçilir</div></div>`;
+  }
+  if (activeCat === 'ders') {
+    return `<div class="legend"><div class="legend-item"><span class="legend-swatch cat-ders"></span>Katılınan ders/eğitim</div></div>`;
+  }
+  if (activeCat === 'rapor') {
+    return `<div class="legend"><div class="legend-item"><span class="legend-swatch cat-rapor"></span>Raporlu gün</div></div>`;
+  }
+  if (activeCat === 'ozelnobet') {
+    return `<div class="legend"><div class="legend-item"><span class="legend-swatch cat-ozelnobet"></span>Özel nöbet istenen gün</div><div class="legend-item"><span style="opacity:.45">▧</span>Hafta içi kilitli ise önce 3 hafta sonu seçin</div></div>`;
+  }
+  return '';
+}
+
+function calendarCatForIso(r, iso, activeCat) {
+  ensureResidentShape(r);
+  if (activeCat === 'nobet') return r.dates[iso] === 'nobet' ? 'nobet' : null;
+  const store = extraDateStore(r, activeCat);
+  return store && store[iso] ? activeCat : null;
+}
+
+function renderCalendarCells(r, year, month, locked, activeCat = state.residentCat) {
+  const days = daysInMonth(year, month);
+  const first = firstDayMon0(year, month);
+  const headers = DAYS_TR_SHORT.map(d => `<div class="day-header">${d}</div>`).join('');
+  let cells = '';
+  for (let i = 0; i < first; i++) cells += '<div class="day-cell empty"></div>';
+  for (let d = 1; d <= days; d++) {
+    const iso = ymd(year, month, d);
+    const cat = calendarCatForIso(r, iso, activeCat);
+    const cls = ['day-cell'];
+    if (cat && CATEGORIES[cat]) cls.push(CATEGORIES[cat].color);
+    const specialWeekdayLocked = activeCat === 'ozelnobet' && !locked && !cat && !isWeekend(year, month, d) && specialWeekendCountInMonth(r, year, month) < 3;
+    if (locked) cls.push('locked');
+    if (specialWeekdayLocked) cls.push('soft-locked');
+    if (isWeekend(year, month, d) && !cat) cls.push('weekend');
+    const title = specialWeekdayLocked ? 'Hafta içi özel nöbet için önce bu ay en az 3 hafta sonu seçin' : (cat && CATEGORIES[cat] ? CATEGORIES[cat].label : '');
+    cells += `<div class="${cls.join(' ')}" data-iso="${iso}" title="${title}">${d}</div>`;
+  }
+  return headers + cells;
+}
+
+function renderCategoryDetailSection(r, cat, locked) {
+  ensureResidentShape(r);
+  if (cat === 'kongre') return renderNamedRangeSection(r, 'kongre', '📍 Kongre bilgileri', 'Kongre adı', 'Kongre seçtiğiniz her ayrı tarih aralığı için otomatik bir slot açılır. İki ayrı aralık seçerseniz iki kongre slotu görünür.', locked);
+  if (cat === 'rotasyon') return renderRotasyonRangeSection(r, locked);
+  if (cat === 'ders') return renderNamedRangeSection(r, 'ders', '📚 Katılınan ders/eğitim bilgileri', 'Ders / eğitim adı', 'Ders veya eğitim için seçtiğiniz her ayrı gün ya da tarih aralığı aşağıda ayrı slot olarak görünür.', locked);
+  if (cat === 'rapor') return renderRaporSection(r, locked);
+  if (cat === 'ozelnobet') return renderOzelNobetSection(r, locked);
+  return '';
+}
+
+function renderNamedRangeSection(r, cat, title, placeholder, helpText, locked) {
+  const isoList = getCategoryIsoList(r, cat);
+  const ranges = buildDateRanges(isoList);
+  const cssClass = cat === 'kongre' ? 'kongre-detail' : 'ders-detail';
+  const rows = ranges.map((range, idx) => {
+    const key = rangeKey(range);
+    const val = getDetailText(r, cat, range, ranges);
+    const label = cat === 'kongre' ? `${idx + 1}. Kongre` : `${idx + 1}. Ders/Eğitim`;
+    return `
+      <div class="detail-row">
+        <div class="detail-date-badge">${label}: ${formatRangeFull(range)}</div>
+        <input type="text" class="detail-name-input" data-detail-cat="${cat}" data-detail-key="${escapeAttr(key)}" value="${escapeAttr(val)}" ${locked ? 'readonly' : ''} placeholder="${placeholder}">
+      </div>
+    `;
+  }).join('');
+  return `
+    <div class="detail-section ${cssClass}">
+      <h3>${title}</h3>
+      <p class="muted mb-2" style="font-size:12px;">${helpText}</p>
+      ${rows || `<p class="muted" style="font-size:12px;">Henüz tarih seçilmedi. Takvimden gün işaretleyince slotlar burada otomatik oluşur.</p>`}
+    </div>
+  `;
+}
+
+function renderRotasyonRangeSection(r, locked) {
+  const isoList = getCategoryIsoList(r, 'rotasyon');
+  const ranges = buildDateRanges(isoList);
+  const rows = ranges.map((range, idx) => {
+    const key = rangeKey(range);
+    const detail = getRotasyonDetail(r, range);
+    return `
+      <div class="detail-row detail-row-rotasyon">
+        <div class="detail-date-badge">${idx + 1}. Rotasyon: ${formatRangeFull(range)}</div>
+        <input type="text" class="detail-name-input" data-detail-cat="rotasyon" data-detail-key="${escapeAttr(key)}" data-detail-field="name" value="${escapeAttr(detail.name)}" ${locked ? 'readonly' : ''} placeholder="Rotasyon adı / birim">
+        <select class="detail-type-select" data-detail-cat="rotasyon" data-detail-key="${escapeAttr(key)}" data-detail-field="type" ${locked ? 'disabled' : ''}>
+          <option value="" ${detail.type === '' ? 'selected' : ''}>İç / dış?</option>
+          <option value="İç" ${detail.type === 'İç' ? 'selected' : ''}>İç rotasyon</option>
+          <option value="Dış" ${detail.type === 'Dış' ? 'selected' : ''}>Dış rotasyon</option>
+        </select>
+      </div>
+    `;
+  }).join('');
+  return `
+    <div class="detail-section rotasyon-detail">
+      <h3>🧭 Rotasyon bilgileri</h3>
+      <p class="muted mb-2" style="font-size:12px;">Rotasyon için seçtiğiniz her ayrı tarih aralığı aşağıda ayrı slot olarak görünür. Her slotta rotasyon adını/birimini yazıp iç veya dış rotasyon olduğunu seçin.</p>
+      ${rows || `<p class="muted" style="font-size:12px;">Henüz rotasyon tarihi seçilmedi. Takvimden gün işaretleyince slotlar burada otomatik oluşur.</p>`}
+    </div>
+  `;
+}
+
+function renderOzelNobetSection(r, locked) {
+  ensureResidentShape(r);
+  const isoList = getCategoryIsoList(r, 'ozelnobet');
+  const monthWeekendCount = specialWeekendCountInMonth(r, state.navYear, state.navMonth);
+  const monthWeekdayCount = specialWeekdayCountInMonth(r, state.navYear, state.navMonth);
+  const weekdayOpen = monthWeekendCount >= 3;
+  const weekendList = isoList.filter(isWeekendIso);
+  const weekdayList = isoList.filter(iso => !isWeekendIso(iso));
+  const weekendRanges = buildDateRanges(weekendList);
+  const weekdayRanges = buildDateRanges(weekdayList);
+  return `
+    <div class="detail-section ozelnobet-detail">
+      <h3>⭐ Özel nöbet istekleri</h3>
+      <p class="muted mb-2" style="font-size:12px;">Önce özellikle nöbet tutmak istediğiniz hafta sonu günlerini seçin. Aynı ay içinde en az 3 hafta sonu günü seçerseniz, o ay için hafta içi özel nöbet günü seçimi açılır.</p>
+      <div class="report-stats">
+        <div class="stat-card"><div class="stat-num">${monthWeekendCount}</div><div class="stat-label">Bu ay seçilen hafta sonu özel nöbeti</div></div>
+        <div class="stat-card"><div class="stat-num">${monthWeekdayCount}</div><div class="stat-label">Bu ay seçilen hafta içi özel nöbeti</div></div>
+        <div class="stat-card"><div class="stat-num">${weekdayOpen ? 'Açık' : `${monthWeekendCount}/3`}</div><div class="stat-label">Hafta içi özel seçim durumu</div></div>
+      </div>
+      ${weekdayOpen
+        ? `<div class="alert alert-success mt-3" style="font-size:12px;">Bu ay 3 veya daha fazla hafta sonu seçildiği için hafta içi özel nöbet seçimi açık.</div>`
+        : `<div class="alert alert-warning mt-3" style="font-size:12px;">Hafta içi gün seçmek için bu ay en az 3 hafta sonu özel nöbet günü seçilmelidir.</div>`}
+      <div class="row mt-3">
+        <button class="btn btn-secondary btn-sm" id="resetSpecialNobetMonth" ${locked ? 'disabled' : ''}>Bu ayın özel nöbet isteklerini sıfırla</button>
+      </div>
+      <p class="muted mt-3" style="font-size:12px;"><b>Hafta sonu özel nöbet istekleri:</b> ${weekendRanges.length ? weekendRanges.map(formatRangeFull).join(' / ') : '— yok —'}</p>
+      <p class="muted" style="font-size:12px;"><b>Hafta içi özel nöbet istekleri:</b> ${weekdayRanges.length ? weekdayRanges.map(formatRangeFull).join(' / ') : '— yok —'}</p>
+    </div>
+  `;
+}
+
+function renderRaporSection(r, locked) {
+  const isoList = getCategoryIsoList(r, 'rapor');
+  const ranges = buildDateRanges(isoList);
+  const monthCount = countDatesInMonth(isoList, state.navYear, state.navMonth);
+  const yearCount = countDatesInYear(isoList, state.navYear);
+  const careerCount = r.assistantStartDate ? countDatesSince(isoList, r.assistantStartDate) : isoList.length;
+  const rangeHtml = ranges.length ? `<p class="muted mt-3" style="font-size:12px;"><b>Seçili rapor aralıkları:</b> ${ranges.map(formatRangeFull).join(' / ')}</p>` : `<p class="muted mt-3" style="font-size:12px;">Henüz raporlu gün seçilmedi.</p>`;
+  return `
+    <div class="detail-section rapor-detail">
+      <h3>🧾 Rapor bilgileri</h3>
+      <div class="form-group" style="max-width:260px;">
+        <label for="assistantStartDate">Asistanlığa başlama tarihi</label>
+        <input type="date" id="assistantStartDate" value="${escapeAttr(r.assistantStartDate || '')}" ${locked ? 'disabled' : ''}>
+      </div>
+      <div class="report-stats">
+        <div class="stat-card"><div class="stat-num">${monthCount}</div><div class="stat-label">${MONTHS_TR[state.navMonth - 1]} ${state.navYear} rapor günü</div></div>
+        <div class="stat-card"><div class="stat-num">${yearCount}</div><div class="stat-label">${state.navYear} yılı rapor günü</div></div>
+        <div class="stat-card"><div class="stat-num">${careerCount}</div><div class="stat-label">${r.assistantStartDate ? 'Asistanlık boyunca rapor günü' : 'Başlama tarihi girilmedi; tüm kayıt'}</div></div>
+      </div>
+      ${rangeHtml}
+    </div>
+  `;
+}
+
+/* ---------- ADMIN VIEW ---------- */
+function renderAdmin() {
+  let roleLabel = '';
+  if (isAdminFull()) roleLabel = 'Genel Yönetici (tam yetki)';
+  else if (isAdminView()) roleLabel = 'Yönetici (görüntüleme)';
+  else if (isAdminRot()) roleLabel = 'Rotasyon görüntüleyici';
+  else if (isAdminNobet()) roleLabel = 'Nöbet görüntüleyici';
+
+  // Available tabs by role
+  const tabs = [];
+  if (isAdminFull() || isAdminView()) {
+    tabs.push({ id: 'summary',     label: 'Özet (tüm kategoriler)' });
+    tabs.push({ id: 'status',      label: 'Durum bildirir' });
+    tabs.push({ id: 'submissions', label: 'Asistanlar' });
+    tabs.push({ id: 'residents',   label: 'Asistan listesi' });
+    if (isAdminFull()) tabs.push({ id: 'admin-pass',  label: 'Şifreler' });
+  } else if (isAdminRot()) {
+    tabs.push({ id: 'summary-rot', label: 'Rotasyon süreleri' });
+  } else if (isAdminNobet()) {
+    tabs.push({ id: 'summary-nobet', label: 'Nöbet istenmeyen günler' });
+  }
+
+  // Default to first available tab
+  if (!tabs.some(t => t.id === state.adminTab)) {
+    state.adminTab = tabs[0]?.id || 'summary';
+  }
+
+  const tabHtml = tabs.map(t =>
+    `<button class="tab ${state.adminTab === t.id ? 'active' : ''}" data-admintab="${t.id}">${t.label}</button>`
+  ).join('');
+
+  let body = '';
+  if (state.adminTab === 'summary')        body = renderAdminSummary();
+  else if (state.adminTab === 'status')     body = renderAdminStatus();
+  else if (state.adminTab === 'summary-rot')   body = renderAdminRotSummary();
+  else if (state.adminTab === 'summary-nobet') body = renderAdminNobetSummary();
+  else if (state.adminTab === 'submissions')   body = renderAdminSubmissions();
+  else if (state.adminTab === 'residents')     body = renderAdminResidents();
+  else if (state.adminTab === 'admin-pass')    body = renderAdminPasswords();
+
+  return `
+    <div class="header-bar">
+      <div>
+        <h1>Yönetici Paneli</h1>
+        <div class="subtitle">${roleLabel}</div>
+      </div>
+      <div class="row">
+        <span class="user-chip"><span class="dot"></span>${escapeHtml(roleLabel)}</span>
+        <button class="btn btn-ghost btn-sm" id="logoutBtn">Çıkış</button>
+      </div>
+    </div>
+
+    ${state.flash ? `<div class="alert alert-success">${escapeHtml(state.flash)}</div>` : ''}
+
+    <div class="tab-bar">${tabHtml}</div>
+
+    ${body}
+  `;
+}
+
+/* ---------- ADMIN: full summary ---------- */
+function renderAdminSummary() {
+  const residents = state.data.residents.filter(r => r.name && r.name.trim());
+
+  const html = residents.map(r => {
+    ensureResidentShape(r);
+    const nobetCombinedDates = getNoDutyIsoList(r);
+    const sadeceKisiselNobet = getCategoryIsoList(r, 'nobet');
+    const izinDates = getCategoryIsoList(r, 'izin');
+    const kongreDates = getCategoryIsoList(r, 'kongre');
+    const rotDates = getCategoryIsoList(r, 'rotasyon');
+    const disRotDates = getExternalRotasyonIsoList(r);
+    const dersDates = getCategoryIsoList(r, 'ders');
+    const raporDates = getCategoryIsoList(r, 'rapor');
+    const ozelNobetDates = getCategoryIsoList(r, 'ozelnobet');
+
+    const fmtOrEmpty = (arr) => arr.length > 0
+      ? formatDatesByMonth(arr)
+      : '<span class="empty-tok">— yok —</span>';
+
+    const kongreDetail = formatNamedDetails(r, 'kongre');
+    const rotasyonDetail = formatNamedDetails(r, 'rotasyon');
+    const dersDetail = formatNamedDetails(r, 'ders');
+
+    return `
+      <div class="summary-resident">
+        <div class="res-name">${escapeHtml(r.name)} ${r.submitted ? '✓' : ''}</div>
+        <div class="res-line"><span class="res-label" style="color: var(--coral);">Nöbet yok (tümü)</span> ${fmtOrEmpty(nobetCombinedDates)}</div>
+        <div style="margin-top: 8px; padding-left: 12px; border-left: 2px solid var(--line-light);">
+          <div class="res-line" style="margin-left: 0;"><span class="res-label">↳ Kişisel istek</span> ${fmtOrEmpty(sadeceKisiselNobet)}</div>
+          <div class="res-line" style="margin-left: 0;"><span class="res-label">↳ Kongre</span> ${fmtOrEmpty(kongreDates)}</div>
+          <div class="res-line" style="margin-left: 0;"><span class="res-label">↳ İzin</span> ${fmtOrEmpty(izinDates)}</div>
+          <div class="res-line" style="margin-left: 0;"><span class="res-label">↳ Dış rotasyon</span> ${fmtOrEmpty(disRotDates)}</div>
+        </div>
+        <div class="res-line" style="margin-top: 8px;"><span class="res-label">Rotasyon</span> ${fmtOrEmpty(rotDates)}</div>
+        <div class="res-line"><span class="res-label">Ders</span> ${fmtOrEmpty(dersDates)}</div>
+        <div class="res-line"><span class="res-label">Rapor</span> ${fmtOrEmpty(raporDates)}</div>
+        <div class="res-line"><span class="res-label">Özel nöbet</span> ${fmtOrEmpty(ozelNobetDates)}</div>
+        ${kongreDetail ? `<div class="kongre-note">📍 Kongreler — ${kongreDetail}</div>` : ''}
+        ${rotasyonDetail ? `<div class="kongre-note">🧭 Rotasyonlar — ${rotasyonDetail}</div>` : ''}
+        ${dersDetail ? `<div class="kongre-note">📚 Dersler — ${dersDetail}</div>` : ''}
+      </div>
+    `;
+  }).join('');
+
+  return `
+    <h2>Özet — tüm kategoriler</h2>
+    <p class="muted mb-2"><b>Nöbet yok (tümü)</b> = nöbet istenmeyen + izin + kongre + <b>dış rotasyon</b> günleri birleşik. İç rotasyonlar nöbet tutulabilir kabul edilir; kişi gerekirse ayrıca nöbet istememe takviminden gün seçebilir.</p>
+    <div class="row mb-2">
+      <button class="btn btn-sm" id="copyAllBtn">📋 Düz metin kopyala</button>
+    </div>
+    <div class="summary-box">${html || '<span class="empty-tok">— asistan yok —</span>'}</div>
+    <textarea id="plainAll" style="position:absolute;left:-9999px;" readonly>${escapeHtml(buildPlainAll(residents))}</textarea>
+  `;
+}
+
+function buildPlainAll(residents) {
+  const lines = [];
+  residents.forEach(r => {
+    ensureResidentShape(r);
+    lines.push(`${r.name}${r.submitted ? ' (onaylı)' : ''}:`);
+    const nobetCombinedIso = getNoDutyIsoList(r);
+    const kisiselIso = getCategoryIsoList(r, 'nobet');
+    const kongreIso  = getCategoryIsoList(r, 'kongre');
+    const izinIso    = getCategoryIsoList(r, 'izin');
+    const rotIso     = getCategoryIsoList(r, 'rotasyon');
+    const disRotIso  = getExternalRotasyonIsoList(r);
+    const dersIso    = getCategoryIsoList(r, 'ders');
+    const raporIso   = getCategoryIsoList(r, 'rapor');
+    const ozelIso    = getCategoryIsoList(r, 'ozelnobet');
+    lines.push(`  Nöbet yok (tümü): ${nobetCombinedIso.length ? plainByMonth(nobetCombinedIso) : '—'}`);
+    lines.push(`    ↳ Kişisel istek: ${kisiselIso.length ? plainByMonth(kisiselIso) : '—'}`);
+    lines.push(`    ↳ Kongre:        ${kongreIso.length ? plainByMonth(kongreIso) : '—'}`);
+    lines.push(`    ↳ İzin:          ${izinIso.length ? plainByMonth(izinIso) : '—'}`);
+    lines.push(`    ↳ Dış rotasyon:  ${disRotIso.length ? plainByMonth(disRotIso) : '—'}`);
+    lines.push(`  Rotasyon:         ${rotIso.length ? plainByMonth(rotIso) : '—'}`);
+    lines.push(`  Ders:             ${dersIso.length ? plainByMonth(dersIso) : '—'}`);
+    lines.push(`  Rapor:            ${raporIso.length ? plainByMonth(raporIso) : '—'}`);
+    lines.push(`  Özel nöbet:       ${ozelIso.length ? plainByMonth(ozelIso) : '—'}`);
+    const kDetail = plainNamedDetails(r, 'kongre');
+    const rotDetail = plainNamedDetails(r, 'rotasyon');
+    const dDetail = plainNamedDetails(r, 'ders');
+    if (kDetail) lines.push(`  Kongre adları: ${kDetail}`);
+    if (rotDetail) lines.push(`  Rotasyon bilgileri: ${rotDetail}`);
+    if (dDetail) lines.push(`  Ders adları:   ${dDetail}`);
+    lines.push(`  Asistanlığa başlama: ${r.assistantStartDate || '—'}`);
+    lines.push('');
+  });
+  return lines.join('\n');
+}
+
+function plainByMonth(isoList) {
+  const byMonth = {};
+  isoList.forEach(iso => {
+    const { year, month, day } = parseYmd(iso);
+    const k = `${year}-${month}`;
+    if (!byMonth[k]) byMonth[k] = { year, month, days: [] };
+    byMonth[k].days.push(day);
+  });
+  const parts = Object.values(byMonth)
+    .sort((a,b) => a.year !== b.year ? a.year - b.year : a.month - b.month)
+    .map(g => {
+      const sorted = g.days.slice().sort((a,b)=>a-b);
+      return `${MONTHS_TR[g.month-1]} ${g.year}: ${sorted.join(', ')} [${formatRanges(sorted)}]`;
+    });
+  return parts.join(' / ');
+}
+
+function formatDatesByMonth(isoList) {
+  const byMonth = {};
+  isoList.forEach(iso => {
+    const { year, month, day } = parseYmd(iso);
+    const k = `${year}-${month}`;
+    if (!byMonth[k]) byMonth[k] = { year, month, days: [] };
+    byMonth[k].days.push(day);
+  });
+  return Object.values(byMonth)
+    .sort((a,b) => a.year !== b.year ? a.year - b.year : a.month - b.month)
+    .map(g => {
+      const sorted = g.days.slice().sort((a,b)=>a-b);
+      return `<div class="month-section"><span class="mname">${MONTHS_TR[g.month-1]} ${g.year}:</span> ${sorted.join(', ')} <span class="muted" style="font-size:12px;">(${formatRanges(sorted)})</span></div>`;
+    }).join('');
+}
+
+function formatNamedDetails(r, cat) {
+  const ranges = buildDateRanges(getCategoryIsoList(r, cat));
+  return ranges.map((range, idx) => {
+    if (cat === 'rotasyon') {
+      const d = getRotasyonDetail(r, range);
+      const parts = [];
+      if (d.name) parts.push(escapeHtml(d.name));
+      if (d.type) parts.push(escapeHtml(getRotasyonTypeLabel(d.type)));
+      if (!parts.length) return '';
+      return `${idx + 1}. rotasyon (${formatRangeFull(range)}): ${parts.join(' · ')}`;
+    }
+    const name = getDetailText(r, cat, range, ranges).trim();
+    if (!name) return '';
+    const prefix = cat === 'kongre' ? `${idx + 1}. kongre` : `${idx + 1}. ders`;
+    return `${prefix} (${formatRangeFull(range)}): ${escapeHtml(name)}`;
+  }).filter(Boolean).join(' / ');
+}
+function plainNamedDetails(r, cat) {
+  const ranges = buildDateRanges(getCategoryIsoList(r, cat));
+  return ranges.map((range, idx) => {
+    if (cat === 'rotasyon') {
+      const d = getRotasyonDetail(r, range);
+      const parts = [];
+      if (d.name) parts.push(d.name);
+      if (d.type) parts.push(getRotasyonTypeLabel(d.type));
+      if (!parts.length) return '';
+      return `${idx + 1}. rotasyon (${formatRangeFull(range)}): ${parts.join(' · ')}`;
+    }
+    const name = getDetailText(r, cat, range, ranges).trim();
+    if (!name) return '';
+    const prefix = cat === 'kongre' ? `${idx + 1}. kongre` : `${idx + 1}. ders`;
+    return `${prefix} (${formatRangeFull(range)}): ${name}`;
+  }).filter(Boolean).join(' / ');
+}
+
+function renderAdminStatus() {
+  const residents = state.data.residents.filter(r => r.name && r.name.trim());
+  const now = new Date();
+  const curYear = now.getFullYear();
+  const curMonth = now.getMonth() + 1;
+  const rows = residents.map(r => {
+    ensureResidentShape(r);
+    const cats = ['izin', 'kongre', 'rotasyon', 'ders', 'rapor'];
+    const cells = cats.map(cat => {
+      const list = getCategoryIsoList(r, cat);
+      const m = countDatesInMonth(list, curYear, curMonth);
+      const y = countDatesInYear(list, curYear);
+      const all = r.assistantStartDate ? countDatesSince(list, r.assistantStartDate) : list.length;
+      return `<td><span class="status-pill">Ay: ${m}</span><span class="status-pill">Yıl: ${y}</span><span class="status-pill">Toplam: ${all}</span></td>`;
+    }).join('');
+    return `<tr><td><b>${escapeHtml(r.name)}</b><br><span class="muted">Başlama: ${r.assistantStartDate ? escapeHtml(r.assistantStartDate) : '—'}</span></td>${cells}</tr>`;
+  }).join('');
+  return `
+    <h2>Asistan durumu bildirir ekran</h2>
+    <p class="muted mb-2">Ay = içinde bulunulan ay (${MONTHS_TR[curMonth - 1]} ${curYear}); Yıl = ${curYear}; Toplam = asistanlığa başlama tarihi varsa o tarihten itibaren, yoksa tüm kayıtlar.</p>
+    <div class="summary-box status-table-wrap">
+      <table class="status-table">
+        <thead><tr><th>Asistan</th><th>İzin</th><th>Kongre</th><th>Rotasyon</th><th>Ders</th><th>Rapor</th></tr></thead>
+        <tbody>${rows || '<tr><td colspan="6">— asistan yok —</td></tr>'}</tbody>
+      </table>
+    </div>
+    <textarea id="plainStatus" style="position:absolute;left:-9999px;" readonly>${escapeHtml(buildPlainStatus(residents, curYear, curMonth))}</textarea>
+    <div class="row mt-3"><button class="btn btn-sm" id="copyStatusBtn">📋 Durum özetini kopyala</button></div>
+  `;
+}
+function buildPlainStatus(residents, year, month) {
+  const lines = [`Durum bildirir ekran — ${MONTHS_TR[month - 1]} ${year}`];
+  residents.forEach(r => {
+    ensureResidentShape(r);
+    lines.push(`${r.name} (başlama: ${r.assistantStartDate || '—'}):`);
+    ['izin','kongre','rotasyon','ders','rapor'].forEach(cat => {
+      const list = getCategoryIsoList(r, cat);
+      const m = countDatesInMonth(list, year, month);
+      const y = countDatesInYear(list, year);
+      const all = r.assistantStartDate ? countDatesSince(list, r.assistantStartDate) : list.length;
+      lines.push(`  ${CATEGORIES[cat].label}: Ay ${m}, Yıl ${y}, Toplam ${all}`);
+    });
+  });
+  return lines.join('\n');
+}
+
+/* ---------- ADMIN: rotation-only summary (for rot viewer) ---------- */
+function renderAdminRotSummary() {
+  const residents = state.data.residents.filter(r => r.name && r.name.trim());
+
+  const html = residents.map(r => {
+    ensureResidentShape(r);
+    const rotDates = getCategoryIsoList(r, 'rotasyon');
+    const rotHtml = rotDates.length > 0
+      ? formatDatesByMonth(rotDates)
+      : '<span class="empty-tok">— yok —</span>';
+    const rotDetail = formatNamedDetails(r, 'rotasyon');
+    return `
+      <div class="summary-resident">
+        <div class="res-name">${escapeHtml(r.name)}</div>
+        <div class="res-line">${rotHtml}</div>
+        ${rotDetail ? `<div class="kongre-note">🧭 Rotasyon bilgileri — ${rotDetail}</div>` : ''}
+      </div>
+    `;
+  }).join('');
+
+  return `
+    <h2>Asistan rotasyon süreleri</h2>
+    <p class="muted mb-2">Sadece rotasyon günleri, rotasyon adı ve iç/dış rotasyon bilgisi. Şifreler ve diğer bilgiler bu rolde görüntülenmez.</p>
+    <div class="row mb-2">
+      <button class="btn btn-sm" id="copyRotBtn">📋 Düz metin kopyala</button>
+    </div>
+    <div class="summary-box">${html || '<span class="empty-tok">— asistan yok —</span>'}</div>
+    <textarea id="plainRot" style="position:absolute;left:-9999px;" readonly>${escapeHtml(
+      residents.map(r => {
+        ensureResidentShape(r);
+        const iso = getCategoryIsoList(r, 'rotasyon');
+        const detail = plainNamedDetails(r, 'rotasyon');
+        return `${r.name}: ${iso.length ? plainByMonth(iso) : '—'}${detail ? `\n  Rotasyon bilgileri: ${detail}` : ''}`;
+      }).join('\n')
+    )}</textarea>
+  `;
+}
+
+/* ---------- ADMIN: nöbet-istenmeyen-only summary (for nobet viewer) ---------- */
+function renderAdminNobetSummary() {
+  const residents = state.data.residents.filter(r => r.name && r.name.trim());
+
+  const html = residents.map(r => {
+    ensureResidentShape(r);
+    const nobetCombined = getNoDutyIsoList(r);
+    const kisisel = getCategoryIsoList(r, 'nobet');
+    const kongre  = getCategoryIsoList(r, 'kongre');
+    const izin    = getCategoryIsoList(r, 'izin');
+    const disRot  = getExternalRotasyonIsoList(r);
+    const ozelNobet = getCategoryIsoList(r, 'ozelnobet');
+
+    const fmtOrEmpty = (arr) => arr.length > 0
+      ? formatDatesByMonth(arr)
+      : '<span class="empty-tok">— yok —</span>';
+
+    return `
+      <div class="summary-resident">
+        <div class="res-name">${escapeHtml(r.name)}</div>
+        <div class="res-line"><span class="res-label" style="color: var(--coral);">Tümü</span> ${fmtOrEmpty(nobetCombined)}</div>
+        <div style="margin-top: 8px; padding-left: 12px; border-left: 2px solid var(--line-light);">
+          <div class="res-line" style="margin-left: 0;"><span class="res-label">↳ Kişisel</span> ${fmtOrEmpty(kisisel)}</div>
+          <div class="res-line" style="margin-left: 0;"><span class="res-label">↳ Kongre</span> ${fmtOrEmpty(kongre)}</div>
+          <div class="res-line" style="margin-left: 0;"><span class="res-label">↳ İzin</span> ${fmtOrEmpty(izin)}</div>
+          <div class="res-line" style="margin-left: 0;"><span class="res-label">↳ Dış rotasyon</span> ${fmtOrEmpty(disRot)}</div>
+        </div>
+        <div class="res-line" style="margin-top: 8px;"><span class="res-label" style="color: var(--green);">Özel nöbet</span> ${fmtOrEmpty(ozelNobet)}</div>
+      </div>
+    `;
+  }).join('');
+
+  // plain text
+  const plain = residents.map(r => {
+    ensureResidentShape(r);
+    const nobetCombined = getNoDutyIsoList(r);
+    const kisisel = getCategoryIsoList(r, 'nobet');
+    const kongre  = getCategoryIsoList(r, 'kongre');
+    const izin    = getCategoryIsoList(r, 'izin');
+    const disRot  = getExternalRotasyonIsoList(r);
+    const ozelNobet = getCategoryIsoList(r, 'ozelnobet');
+    const lines = [];
+    lines.push(`${r.name}:`);
+    lines.push(`  Tümü:        ${nobetCombined.length ? plainByMonth(nobetCombined) : '—'}`);
+    lines.push(`    ↳ Kişisel:      ${kisisel.length ? plainByMonth(kisisel) : '—'}`);
+    lines.push(`    ↳ Kongre:       ${kongre.length ? plainByMonth(kongre) : '—'}`);
+    lines.push(`    ↳ İzin:         ${izin.length ? plainByMonth(izin) : '—'}`);
+    lines.push(`    ↳ Dış rotasyon: ${disRot.length ? plainByMonth(disRot) : '—'}`);
+    lines.push(`  Özel nöbet: ${ozelNobet.length ? plainByMonth(ozelNobet) : '—'}`);
+    return lines.join('\n');
+  }).join('\n\n');
+
+  return `
+    <h2>Nöbet istenmeyen günler</h2>
+    <p class="muted mb-2">Tüm asistanların nöbet tutmayacağı günler. Üstte birleşik liste; altında kişisel/kongre/izin/dış rotasyon ayrımı. İç rotasyon otomatik nöbet engeli sayılmaz.</p>
+    <div class="row mb-2">
+      <button class="btn btn-sm" id="copyNobetBtn">📋 Düz metin kopyala</button>
+    </div>
+    <div class="summary-box">${html || '<span class="empty-tok">— asistan yok —</span>'}</div>
+    <textarea id="plainNobet" style="position:absolute;left:-9999px;" readonly>${escapeHtml(plain)}</textarea>
+  `;
+}
+
+/* ---------- ADMIN: submissions ---------- */
+function renderAdminSubmissions() {
+  const residents = state.data.residents.filter(r => r.name && r.name.trim());
+  const editable = canEdit();
+  const rows = residents.map(r => {
+    ensureResidentShape(r);
+    const total = countAllSelections(r);
+    return `
+      <div class="resident-row">
+        <span class="name">${escapeHtml(r.name)}</span>
+        <span class="meta">${total > 0
+          ? `<b>${total}</b> gün toplam`
+          : '<span style="color: var(--ink-muted)">— henüz veri girilmedi —</span>'}</span>
+        <label class="checkbox-wrap" title="${editable ? 'Onayı kaldırırsanız asistan tekrar düzenleyebilir' : 'Sadece görüntüleme'}">
+          <input type="checkbox" data-resid="${r.id}" ${r.submitted ? 'checked' : ''} ${editable ? '' : 'disabled'} class="submit-toggle">
+          ${r.submitted ? 'Onaylandı' : 'Bekleniyor'}
+        </label>
+        ${editable ? `<button class="btn btn-secondary btn-sm edit-resident-btn" data-resid="${r.id}">Düzenle</button>` : ''}
+      </div>
+    `;
+  }).join('');
+
+  return `
+    <h2>Asistan gönderimleri</h2>
+    <p class="muted mb-2">${editable ? 'Onay kutusunu kaldırırsanız ilgili asistan tercihlerini tekrar düzenleyebilir.' : 'Sadece görüntüleme modundasınız.'}</p>
+    <div class="resident-list">${rows || '<div class="resident-row">Henüz asistan eklenmemiş.</div>'}</div>
+
+    ${editable ? `
+      <div class="divider"></div>
+      <h3>⏱ Nöbet sekmesi için süre tanıma</h3>
+      <p class="muted mb-2">Sadece "Nöbet İstenmiyor" sekmesi için süre sınırı koyar (izin/kongre/rotasyon ayrı takvimlerdir ve etkilenmez). Tik atıp gün sayısı yazıp <b>Süreyi başlat</b>'a basarsanız o andan itibaren X gün boyunca asistanlar nöbet sekmesine veri girebilir. Süre dolunca sekme otomatik kilitlenir.</p>
+      ${renderDeadlineControl()}
+      <div class="divider"></div>
+      <h3>Tüm verileri sıfırla</h3>
+      <p class="muted mb-2">Tüm asistanların seçimlerini ve onaylarını sıfırlar. Asistan listesi ve şifreler korunur.</p>
+      <button class="btn btn-danger" id="clearAllBtn">🗑 Tüm verileri temizle</button>
+    ` : ''}
+  `;
+}
+
+function renderDeadlineControl() {
+  const d = state.data.nobetDeadline;
+  const di = nobetDeadlineInfo();
+
+  let statusBox = '';
+  if (di.enabled) {
+    if (di.expired) {
+      statusBox = `<div class="alert alert-danger" style="margin-top:10px;"><b>Süre dolmuş.</b> Başlatma tarihi: ${fmtDateTimeTR(new Date(d.startedAt))} · Bitiş: ${fmtDateTimeTR(di.endsAt)}</div>`;
+    } else {
+      statusBox = `<div class="alert alert-success" style="margin-top:10px;"><b>Süre aktif:</b> ${di.daysLeft} gün kaldı (bitiş: ${fmtDateTimeTR(di.endsAt)})</div>`;
+    }
+  } else {
+    statusBox = `<div class="alert alert-info" style="margin-top:10px;">Süre sınırı kapalı — asistanlar nöbet sekmesine istedikleri zaman veri girebilir.</div>`;
+  }
+
+  return `
+    <div class="row" style="align-items:center; padding: 14px; background: var(--paper); border-radius: 10px;">
+      <label class="checkbox-wrap" style="margin-right:14px;">
+        <input type="checkbox" id="deadlineEnable" ${d.enabled ? 'checked' : ''}>
+        <b>Süre tanı</b>
+      </label>
+      <div style="display:flex; align-items:center; gap:8px;">
+        <input type="number" id="deadlineDays" min="1" max="365" value="${d.days || 5}" style="width:80px; padding:8px;">
+        <span class="muted">gün</span>
+      </div>
+      <button class="btn btn-sm" id="deadlineStartBtn">Süreyi başlat</button>
+      <button class="btn btn-secondary btn-sm" id="deadlineStopBtn">Sıfırla / kapat</button>
+    </div>
+    ${statusBox}
+  `;
+}
+
+/* ---------- ADMIN: residents (list) ---------- */
+function renderAdminResidents() {
+  const all = state.data.residents;
+  const filledCount = all.filter(r => r.name && r.name.trim()).length;
+  const editable = canEdit();
+  const showPass = canSeePasswords();
+
+  const rows = all.map((r, idx) => {
+    ensureResidentShape(r);
+    const count = countAllSelections(r);
+    if (showPass) {
+      return `
+        <div class="slot-row">
+          <span class="slot-num">${idx + 1}</span>
+          <input type="text" class="slot-name" data-resid="${r.id}" value="${escapeHtml(r.name)}" placeholder="(boş slot)" ${editable ? '' : 'readonly'}>
+          <input type="text" class="slot-pass" data-resid="${r.id}" value="${escapeHtml(r.password)}" placeholder="şifre" ${editable ? '' : 'readonly'}>
+          <span class="slot-meta">${count > 0 ? `<b>${count}</b> g${r.submitted ? ' ✓' : ''}` : ''}</span>
+          ${editable ? `<button class="btn btn-ghost btn-sm clear-slot-btn" data-resid="${r.id}" title="Bu slotu boşalt">✕</button>` : '<span></span>'}
+        </div>
+      `;
+    }
+    return `
+      <div class="slot-row" style="grid-template-columns: 28px 1fr 110px;">
+        <span class="slot-num">${idx + 1}</span>
+        <input type="text" class="slot-name" data-resid="${r.id}" value="${escapeHtml(r.name)}" placeholder="(boş slot)" readonly>
+        <span class="slot-meta">${count > 0 ? `<b>${count}</b> g${r.submitted ? ' ✓' : ''}` : ''}</span>
+      </div>
+    `;
+  }).join('');
+
+  return `
+    <h2>Asistan listesi</h2>
+    <p class="muted mb-2">Toplam <b>${all.length}</b> slot · <b>${filledCount}</b> dolu · <b>${all.length - filledCount}</b> boş. ${editable ? 'Genel yönetici isim ve şifreleri değiştirebilir.' : 'Sadece görüntüleme; şifre alanları bu rolde gösterilmez.'}</p>
+
+    <div class="slot-list-header" ${showPass ? '' : 'style="grid-template-columns: 28px 1fr 110px;"'}>
+      <span></span>
+      <span>İsim</span>
+      ${showPass ? '<span>Şifre</span>' : ''}
+      <span>Veri</span>
+      ${showPass ? '<span></span>' : ''}
+    </div>
+    <div class="slot-list mb-2">${rows}</div>
+
+    ${editable ? `
+      <div class="row mb-2">
+        <button class="btn btn-secondary btn-sm" id="addSlotsBtn">+ 5 boş slot ekle</button>
+      </div>
+    ` : ''}
+  `;
+}
+
+/* ---------- ADMIN: admin passwords ---------- */
+function renderAdminPasswords() {
+  if (!isAdminFull()) {
+    return `<p class="muted">Bu rolde yönetici şifreleri görüntülenmez.</p>`;
+  }
+  const a = state.data.admin;
+
+  return `
+    <h2>Yönetici şifreleri</h2>
+    <p class="muted mb-2">Bu ekran yalnızca genel yöneticiye açıktır. Diğer yönetici türleri bu şifreleri göremez.</p>
+
+    <div class="form-group">
+      <label>Genel Yönetici (tam yetki)</label>
+      <input type="text" id="ap-full" value="${escapeHtml(a.fullPassword)}">
+    </div>
+    <div class="form-group">
+      <label>Yönetici (sadece görüntüleme — şifreleri göremez/değiştiremez)</label>
+      <input type="text" id="ap-view" value="${escapeHtml(a.viewerPassword)}">
+    </div>
+    <div class="form-group">
+      <label>Rotasyon görüntüleyici (sadece rotasyon, şifre göremez)</label>
+      <input type="text" id="ap-rot" value="${escapeHtml(a.rotViewerPassword)}">
+    </div>
+    <div class="form-group">
+      <label>Nöbet görüntüleyici (sadece nöbet birleşik, şifre göremez)</label>
+      <input type="text" id="ap-nobet" value="${escapeHtml(a.nobetViewerPassword)}">
+    </div>
+
+    <button class="btn" id="saveAdminPassBtn">Şifreleri kaydet</button>
+  `;
+}
+
+/* ============================================================
+   EVENTS
+   ============================================================ */
+function bindEvents() {
+  const loginBtn = document.getElementById('loginBtn');
+  if (loginBtn) {
+    loginBtn.addEventListener('click', handleLogin);
+    document.getElementById('loginPass').addEventListener('keydown', e => {
+      if (e.key === 'Enter') handleLogin();
+    });
+  }
+
+  const logoutBtn = document.getElementById('logoutBtn');
+  if (logoutBtn) logoutBtn.addEventListener('click', () => {
+    state.currentUser = null;
+    state.view = 'login';
+    state.loginError = '';
+    state.adminEditingResidentId = null;
+    render();
+  });
+
+  const adminBackBtn = document.getElementById('adminBackBtn');
+  if (adminBackBtn) adminBackBtn.addEventListener('click', () => {
+    state.currentUser = 'admin-full';
+    state.view = 'admin';
+    state.adminTab = state.adminReturnTab || 'submissions';
+    state.adminEditingResidentId = null;
+    render();
+  });
+
+  // Resident category tabs
+  document.querySelectorAll('.tab[data-cat]').forEach(t => {
+    t.addEventListener('click', () => {
+      state.residentCat = t.dataset.cat;
+      render();
+    });
+  });
+
+  // Month navigator
+  const navMonth = document.getElementById('navMonth');
+  if (navMonth) navMonth.addEventListener('change', () => {
+    state.navMonth = parseInt(navMonth.value, 10);
+    render();
+  });
+  const navYear = document.getElementById('navYear');
+  if (navYear) navYear.addEventListener('change', () => {
+    state.navYear = parseInt(navYear.value, 10);
+    render();
+  });
+  const prevMonth = document.getElementById('prevMonth');
+  if (prevMonth) prevMonth.addEventListener('click', () => {
+    state.navMonth -= 1;
+    if (state.navMonth < 1) { state.navMonth = 12; state.navYear -= 1; }
+    if (state.navYear < YEAR_MIN) { state.navYear = YEAR_MIN; state.navMonth = 1; }
+    render();
+  });
+  const nextMonth = document.getElementById('nextMonth');
+  if (nextMonth) nextMonth.addEventListener('click', () => {
+    state.navMonth += 1;
+    if (state.navMonth > 12) { state.navMonth = 1; state.navYear += 1; }
+    if (state.navYear > YEAR_MAX) { state.navYear = YEAR_MAX; state.navMonth = 12; }
+    render();
+  });
+
+  // Day click — resident
+  document.querySelectorAll('#calendar .day-cell[data-iso]').forEach(cell => {
+    cell.addEventListener('click', () => {
+      const r = state.currentUser;
+      if (!canEditCurrentResident(r)) return;
+      ensureResidentShape(r);
+      if (state.residentCat === 'nobet') {
+        const di = nobetDeadlineInfo();
+        if (di.expired) {
+          alert('Nöbet istenmeyen günler için süre dolmuştur. Yöneticiye başvurun.');
+          return;
+        }
+      }
+      toggleCategoryDate(r, state.residentCat, cell.dataset.iso);
+      saveData();
+      render();
+    });
+  });
+
+  // Clear this month's category
+  const clearMonthCat = document.getElementById('clearMonthCat');
+  if (clearMonthCat) clearMonthCat.addEventListener('click', () => {
+    const r = state.currentUser;
+    if (!canEditCurrentResident(r)) return;
+    const removed = clearMonthForCategory(r, state.residentCat, state.navYear, state.navMonth);
+    saveData();
+    state.flash = `${removed.length} gün temizlendi.`;
+    render();
+  });
+
+  const resetSpecialNobetMonth = document.getElementById('resetSpecialNobetMonth');
+  if (resetSpecialNobetMonth) resetSpecialNobetMonth.addEventListener('click', () => {
+    const r = state.currentUser;
+    if (!canEditCurrentResident(r)) return;
+    const removed = clearSpecialMonth(r, state.navYear, state.navMonth);
+    saveData();
+    state.flash = `${removed.length} özel nöbet isteği sıfırlandı.`;
+    render();
+  });
+
+  // Kongre/Rotasyon/Ders detail inputs
+  document.querySelectorAll('.detail-name-input').forEach(inp => {
+    inp.addEventListener('change', () => {
+      const r = state.currentUser;
+      if (!canEditCurrentResident(r)) return;
+      ensureResidentShape(r);
+      const cat = inp.dataset.detailCat;
+      const key = inp.dataset.detailKey;
+      const store = detailStore(r, cat);
+      if (!store) return;
+      const v = inp.value.trim();
+      if (cat === 'rotasyon') {
+        setRotasyonDetailField(r, key, 'name', v);
+      } else {
+        if (v) store[key] = v;
+        else delete store[key];
+      }
+      saveData();
+    });
+  });
+
+  document.querySelectorAll('.detail-type-select').forEach(sel => {
+    sel.addEventListener('change', () => {
+      const r = state.currentUser;
+      if (!canEditCurrentResident(r)) return;
+      ensureResidentShape(r);
+      const key = sel.dataset.detailKey;
+      const v = sel.value;
+      setRotasyonDetailField(r, key, 'type', v);
+      saveData();
+    });
+  });
+
+  const assistantStartDate = document.getElementById('assistantStartDate');
+  if (assistantStartDate) assistantStartDate.addEventListener('change', () => {
+    const r = state.currentUser;
+    if (!canEditCurrentResident(r)) return;
+    ensureResidentShape(r);
+    r.assistantStartDate = assistantStartDate.value || '';
+    saveData();
+    render();
+  });
+
+
+  const saveOwnPasswordBtn = document.getElementById('saveOwnPasswordBtn');
+  if (saveOwnPasswordBtn) saveOwnPasswordBtn.addEventListener('click', () => {
+    const r = state.currentUser;
+    if (typeof r !== 'object' || isAdminEditingResident()) return;
+    const p1 = document.getElementById('ownNewPass').value.trim();
+    const p2 = document.getElementById('ownNewPass2').value.trim();
+    if (!p1 || !p2) { alert('Yeni şifre alanlarını doldurun.'); return; }
+    if (p1.length < 4) { alert('Şifre en az 4 karakter olmalı.'); return; }
+    if (p1 !== p2) { alert('Şifreler aynı değil.'); return; }
+    r.password = p1;
+    saveData();
+    state.flash = 'Şifreniz güncellendi.';
+    alert('Şifreniz güncellendi. Bir sonraki girişte yeni şifrenizi kullanın.');
+    render();
+  });
+
+  // Submit
+  const submitBtn = document.getElementById('submitBtn');
+  if (submitBtn) submitBtn.addEventListener('click', () => {
+    const r = state.currentUser;
+    ensureResidentShape(r);
+    const total = countAllSelections(r);
+    if (total === 0) {
+      if (!confirm('Hiç gün seçmediniz. Yine de "tercih yok" olarak kaydedilsin mi?')) return;
+    } else {
+      if (!confirm(`Toplam ${total} gün/kayıt seçtiniz. Kaydedilsin mi? Sonra değiştiremezsiniz.`)) return;
+    }
+    r.submitted = true;
+    saveData();
+    render();
+  });
+
+  // Admin tabs
+  document.querySelectorAll('.tab[data-admintab]').forEach(t => {
+    t.addEventListener('click', () => {
+      state.adminTab = t.dataset.admintab;
+      render();
+    });
+  });
+
+  // Admin: clear all
+  const clearAllBtn = document.getElementById('clearAllBtn');
+  if (clearAllBtn) clearAllBtn.addEventListener('click', () => {
+    if (!canEdit()) return;
+    if (!confirm('TÜM tercihler ve onaylar silinecek. Asistan listesi ve şifreler korunur. Devam edilsin mi?')) return;
+    state.data.residents.forEach(r => {
+      ensureResidentShape(r);
+      r.dates = {}; r.izinDates = {}; r.kongreDates = {}; r.rotasyonDates = {}; r.kongreler = {}; r.rotasyonlar = {}; r.dersDates = {}; r.dersler = {}; r.raporDates = {}; r.ozelNobetDates = {}; r.submitted = false;
+    });
+    saveData();
+    state.flash = 'Veriler temizlendi.';
+    render();
+  });
+
+  // Deadline controls
+  const deadlineStartBtn = document.getElementById('deadlineStartBtn');
+  if (deadlineStartBtn) deadlineStartBtn.addEventListener('click', () => {
+    if (!canEdit()) return;
+    const enabled = document.getElementById('deadlineEnable').checked;
+    const days = parseInt(document.getElementById('deadlineDays').value, 10);
+    if (!enabled) { alert('Önce "Süre tanı" kutucuğunu işaretleyin.'); return; }
+    if (isNaN(days) || days < 1 || days > 365) { alert('Geçerli gün sayısı girin (1-365).'); return; }
+    state.data.nobetDeadline = { enabled: true, days: days, startedAt: new Date().toISOString() };
+    saveData();
+    state.flash = `Süre başlatıldı: ${days} gün.`;
+    render();
+  });
+  const deadlineStopBtn = document.getElementById('deadlineStopBtn');
+  if (deadlineStopBtn) deadlineStopBtn.addEventListener('click', () => {
+    if (!canEdit()) return;
+    if (!confirm('Süre tanıma kapatılacak. Devam edilsin mi?')) return;
+    state.data.nobetDeadline = { enabled: false, days: 5, startedAt: null };
+    saveData();
+    state.flash = 'Süre kapatıldı.';
+    render();
+  });
+  const deadlineEnable = document.getElementById('deadlineEnable');
+  if (deadlineEnable) deadlineEnable.addEventListener('change', () => {
+    if (!canEdit()) return;
+    state.data.nobetDeadline.enabled = deadlineEnable.checked;
+    saveData();
+    render();
+  });
+
+  // Admin: toggle submission
+  document.querySelectorAll('.submit-toggle').forEach(cb => {
+    cb.addEventListener('change', () => {
+      if (!canEdit()) { cb.checked = !cb.checked; return; }
+      const r = state.data.residents.find(x => x.id === cb.dataset.resid);
+      if (r) { r.submitted = cb.checked; saveData(); }
+    });
+  });
+
+  // Copy buttons
+  ['copyAllBtn','copyRotBtn','copyNobetBtn','copyStatusBtn'].forEach(btnId => {
+    const btn = document.getElementById(btnId);
+    if (!btn) return;
+    const taId = btnId === 'copyAllBtn' ? 'plainAll' : btnId === 'copyRotBtn' ? 'plainRot' : btnId === 'copyStatusBtn' ? 'plainStatus' : 'plainNobet';
+    btn.addEventListener('click', () => {
+      const ta = document.getElementById(taId);
+      ta.select();
+      try {
+        document.execCommand('copy');
+        const orig = btn.textContent;
+        btn.textContent = '✓ Kopyalandı';
+        setTimeout(() => { btn.textContent = orig; }, 1500);
+      } catch (e) { alert('Kopyalanamadı.'); }
+    });
+  });
+
+  // Slot editing
+  document.querySelectorAll('.slot-name').forEach(inp => {
+    inp.addEventListener('change', () => {
+      if (!canEdit()) return;
+      const r = state.data.residents.find(x => x.id === inp.dataset.resid);
+      if (!r) return;
+      const newName = inp.value.trim();
+      if (newName && state.data.residents.some(x => x.id !== r.id && x.name.trim().toLowerCase() === newName.toLowerCase())) {
+        alert('Bu isim başka bir slotta zaten var.');
+        inp.value = r.name;
+        return;
+      }
+      r.name = newName;
+      saveData();
+    });
+  });
+
+  document.querySelectorAll('.slot-pass').forEach(inp => {
+    inp.addEventListener('change', () => {
+      if (!canEdit()) return;
+      const r = state.data.residents.find(x => x.id === inp.dataset.resid);
+      if (!r) return;
+      r.password = inp.value.trim() || '1234';
+      if (!inp.value.trim()) inp.value = '1234';
+      saveData();
+    });
+  });
+
+  document.querySelectorAll('.clear-slot-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (!canEdit()) return;
+      const r = state.data.residents.find(x => x.id === btn.dataset.resid);
+      if (!r) return;
+      const label = r.name || '(boş slot)';
+      if (!confirm(`${label} slotu boşaltılacak (isim, şifre, tarihler sıfırlanır). Devam?`)) return;
+      r.name = '';
+      r.password = '1234';
+      r.submitted = false;
+      r.dates = {};
+      r.izinDates = {};
+      r.kongreDates = {};
+      r.rotasyonDates = {};
+      r.kongreler = {};
+      r.rotasyonlar = {};
+      r.dersDates = {};
+      r.dersler = {};
+      r.raporDates = {};
+      r.ozelNobetDates = {};
+      r.assistantStartDate = '';
+      saveData();
+      state.flash = 'Slot boşaltıldı.';
+      render();
+    });
+  });
+
+  const addSlotsBtn = document.getElementById('addSlotsBtn');
+  if (addSlotsBtn) addSlotsBtn.addEventListener('click', () => {
+    if (!canEdit()) return;
+    for (let i = 0; i < 5; i++) state.data.residents.push(makeBlankResident(newId(), ''));
+    saveData();
+    state.flash = '5 boş slot eklendi.';
+    render();
+  });
+
+
+  document.querySelectorAll('.edit-resident-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (!canEdit()) return;
+      const r = state.data.residents.find(x => x.id === btn.dataset.resid);
+      if (!r) return;
+      ensureResidentShape(r);
+      state.adminReturnTab = state.adminTab;
+      state.adminEditingResidentId = r.id;
+      state.currentUser = r;
+      state.view = 'resident';
+      render();
+    });
+  });
+
+  // Save admin passwords
+  const saveAdminPassBtn = document.getElementById('saveAdminPassBtn');
+  if (saveAdminPassBtn) saveAdminPassBtn.addEventListener('click', () => {
+    if (!canEdit()) return;
+    const f = document.getElementById('ap-full').value.trim();
+    const v = document.getElementById('ap-view').value.trim();
+    const r = document.getElementById('ap-rot').value.trim();
+    const n = document.getElementById('ap-nobet').value.trim();
+    if (!f || !v || !r || !n) { alert('Tüm şifreler dolu olmalı.'); return; }
+    state.data.admin = { fullPassword: f, viewerPassword: v, rotViewerPassword: r, nobetViewerPassword: n };
+    saveData();
+    state.flash = 'Yönetici şifreleri güncellendi.';
+    render();
+  });
+}
+
+function handleLogin() {
+  const userVal = document.getElementById('loginUser').value;
+  const pass = document.getElementById('loginPass').value;
+  if (!userVal) { state.loginError = 'Kullanıcı seçin.'; render(); return; }
+
+  const adminMap = {
+    '__admin_full__':  { check: state.data.admin.fullPassword,        role: 'admin-full' },
+    '__admin_view__':  { check: state.data.admin.viewerPassword,      role: 'admin-view' },
+    '__admin_rot__':   { check: state.data.admin.rotViewerPassword,   role: 'admin-rot' },
+    '__admin_nobet__': { check: state.data.admin.nobetViewerPassword, role: 'admin-nobet' },
+  };
+  if (adminMap[userVal]) {
+    if (pass === adminMap[userVal].check) {
+      state.currentUser = adminMap[userVal].role;
+      state.view = 'admin';
+      // pick first sensible tab
+      if (state.currentUser === 'admin-rot')   state.adminTab = 'summary-rot';
+      else if (state.currentUser === 'admin-nobet') state.adminTab = 'summary-nobet';
+      else state.adminTab = 'summary';
+      state.loginError = '';
+      state.adminEditingResidentId = null;
+      render();
+    } else {
+      state.loginError = 'Şifre yanlış.';
+      render();
+    }
+    return;
+  }
+  const r = state.data.residents.find(x => x.id === userVal);
+  if (r && r.password === pass) {
+    state.currentUser = r;
+    state.view = 'resident';
+    ensureResidentShape(r);
+    state.residentCat = 'nobet';
+    state.loginError = '';
+    state.adminEditingResidentId = null;
+    render();
+  } else {
+    state.loginError = 'Şifre yanlış.';
+    render();
+  }
+}
+
+/* ============================================================
+   INIT
+   ============================================================ */
+async function start() {
+  render();
+  try {
+    await signInAnonymously(fbAuth);
+
+    let firstSnapshot = true;
+    onSnapshot(DOC_REF, async (snap) => {
+      if (snap.exists()) {
+        const data = snap.data();
+        if (!data.admin) data.admin = structuredClone(DEFAULT_DATA.admin);
+        if (!data.nobetDeadline) data.nobetDeadline = structuredClone(DEFAULT_DATA.nobetDeadline);
+        if (!data.residents) data.residents = buildDefaultResidents();
+        // sanity: ensure each resident has old and new fields
+        data.residents.forEach(r => ensureResidentShape(r));
+        state.data = data;
+      } else if (firstSnapshot) {
+        state.data = structuredClone(DEFAULT_DATA);
+        try {
+          await setDoc(DOC_REF, state.data);
+        } catch (e) {
+          console.error('İlk veri yazımı başarısız:', e);
+        }
+      }
+      state.fbStatus = 'ready';
+      firstSnapshot = false;
+
+      if (state.currentUser && typeof state.currentUser === 'object') {
+        const fresh = state.data.residents.find(r => r.id === state.currentUser.id);
+        if (fresh) state.currentUser = fresh;
+        else { state.currentUser = null; state.view = 'login'; }
+      }
+
+      render();
+    }, (err) => {
+      console.error('Firestore okuma hatası:', err);
+      state.fbStatus = 'error';
+      state.fbError = err.message || String(err);
+      render();
+    });
+  } catch (e) {
+    console.error('Firebase başlatılamadı:', e);
+    state.fbStatus = 'error';
+    state.fbError = e.message || String(e);
+    render();
+  }
+}
+
+start();
+</script>
+</body>
+</html>
